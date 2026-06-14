@@ -13,7 +13,7 @@
   "defaultThinkingLevel": "medium",
   "theme": "dracula",
   "hideThinkingBlock": false,
-  "quietStartup": true,
+  "quietStartup": false,
   "compaction": {
     "enabled": true,
     "reserveTokens": 16384,
