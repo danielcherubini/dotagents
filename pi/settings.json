@@ -1,0 +1,51 @@
+{
+  "lastChangelogVersion": "0.72.1",
+  "defaultProvider": "tama",
+  "defaultModel": "unsloth/qwen3.6-35b-a3b-gguf",
+  "packages": [
+    "npm:pi-manage-todo-list",
+    "npm:pi-web-access",
+    "npm:pi-ask-tool-extension",
+    "npm:pi-updater",
+    "npm:pi-dracula",
+    "npm:pi-provider-vertex-anthropic",
+    "npm:pi-subagents",
+    "npm:pi-image-tools",
+    "npm:pi-desktop-notify",
+    "npm:pi-provider-tama"
+  ],
+  "defaultThinkingLevel": "medium",
+  "theme": "dracula",
+  "hideThinkingBlock": false,
+  "quietStartup": true,
+  "compaction": {
+    "enabled": true,
+    "reserveTokens": 16384,
+    "keepRecentTokens": 20000
+  },
+  "subagents": {
+    "disableBuiltins": true
+  },
+  "treeFilterMode": "no-tools",
+  "terminal": {
+    "showTerminalProgress": false
+  },
+  "enabledModels": [
+    "tama/unsloth/qwen3.6-35b-a3b-gguf",
+    "tama/unsloth/qwen3.6-27b-gguf",
+    "openrouter/z-ai/glm-5.1",
+    "openrouter/xiaomi/mimo-v2-pro",
+    "openrouter/xiaomi/mimo-v2-omni",
+    "openrouter/qwen/qwen3.6-plus",
+    "openrouter/minimax/minimax-m2.7",
+    "openrouter/deepseek/deepseek-v4-flash",
+    "openrouter/deepseek/deepseek-v4-pro",
+    "tama/davidau/qwen3.6-27b-gguf"
+  ],
+  "hephaestus": {
+    "mutedTheme": true,
+    "codeUnindent": true,
+    "labelText": "Thinking...",
+    "labelColor": "255,215,0"
+  }
+}
