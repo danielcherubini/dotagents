@@ -1,9 +1,8 @@
 {
-  "lastChangelogVersion": "0.79.3",
+  "lastChangelogVersion": "0.79.4",
   "defaultProvider": "tama",
   "defaultModel": "whatevers-hot-n-fresh",
   "packages": [
-    "npm:pi-manage-todo-list",
     "npm:pi-web-access",
     "npm:pi-ask-tool-extension",
     "npm:pi-updater",
