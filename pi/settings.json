@@ -1,7 +1,7 @@
 {
-  "lastChangelogVersion": "0.79.8",
-  "defaultProvider": "openrouter",
-  "defaultModel": "minimax/minimax-m3",
+  "lastChangelogVersion": "0.79.9",
+  "defaultProvider": "tama",
+  "defaultModel": "whatevers-hot-n-fresh",
   "packages": [
     "npm:pi-web-access",
     "npm:pi-updater",
