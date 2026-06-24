@@ -10,6 +10,20 @@ Read the plan, create a feature branch, dispatch subagents per task, review the 
 - Create feature branch using gitflow conventions (load `gitflow-branching` skill if needed)
 - Create a todo list with `manage_todo_list` with all tasks from the plan
 
+## Baseline Check (Mandatory Before Task 1)
+
+Before writing a single line of code, run the full test/lint/build suite and record the results:
+
+```bash
+# Run whatever the project's CI check is (go test, npm test, cargo test, etc.)
+# Capture every FAIL, ERROR, and lint warning
+```
+
+**Rule: You own every failure in CI — pre-existing or not.**
+If a test or lint check was already broken before your branch, you must still fix it before opening a PR. The CI gate does not know or care what was broken before you arrived. A PR that introduces zero regressions but leaves pre-existing failures will still be rejected. Fix them or report BLOCKED to the user before proceeding.
+
+Document the baseline results in your working notes so you know which failures were pre-existing vs introduced by your changes.
+
 ## Task Dispatch Protocol
 
 For each task, dispatch a `general` subagent (sequentially, not parallel):
@@ -24,9 +38,9 @@ Subagent prompt template:
     1. READ the files listed below first to understand the existing patterns
     2. USE the Edit tool to modify existing files — do NOT rewrite entire files
     3. USE the Write tool to create new files
-    4. RUN `cargo fmt --all`, then `cargo check --workspace`, then `cargo test --workspace` to validate
-    5. COMMIT your work with: `git commit -am "[commit message]"`
-    6. If cargo check fails, READ the error, READ the relevant source file, FIX the code with Edit tool, then re-run check
+    4. Run build, lint/vet, and the FULL test suite to validate — ALL must pass
+    5. COMMIT your work with: `git commit -am "[commit message]"` — only after everything is green
+    6. If any check fails, READ the error, READ the relevant source file, FIX the code with Edit tool, then re-run
     7. DO NOT output planning text — output actual file changes
 
     ## Task
@@ -39,9 +53,11 @@ Subagent prompt template:
     - Implement exactly what the task specifies
     - Write tests (TDD: failing test first, then implementation)
     - Validate your work by running each step **independently and in order** — wait for each to finish before starting the next:
-      1. Formatting (e.g. `cargo fmt`, `prettier`, etc.)
-      2. Build / compile (e.g. `cargo build`, `npm run build`, etc.)
-      3. Tests (e.g. `cargo test`, `npm test`, etc.)
+      1. Formatting (e.g. `cargo fmt`, `prettier`, `gofmt`, etc.)
+      2. Build / compile (e.g. `cargo build`, `npm run build`, `go build ./...`, etc.)
+      3. Tests — **the entire test suite**, not just the new tests (e.g. `cargo test`, `npm test`, `go test ./...`, etc.)
+      4. Lint / vet (e.g. `go vet ./...`, `eslint`, `clippy`, etc.)
+    - **ALL checks must pass — including pre-existing failures.** A test that was already broken before your task is still your responsibility to fix. The CI gate rejects the PR regardless of when the failure was introduced. If you cannot fix a pre-existing failure, report BLOCKED before committing.
     - If any step fails: **STOP. Do not re-run it yet.** Read the error output, read the relevant source files, then use Edit/Write tools to fix the root cause. Only re-run after you have made file changes.
     - **Loop-break rule:** If you run a step and it fails, and you have made no file edits since the last time it failed, you are looping. Stop immediately and report back with status BLOCKED — describe the error and what you tried.
     - Commit your work with a descriptive message
@@ -99,7 +115,7 @@ Then follow the user's choice immediately — do NOT ask for additional confirma
    ```
    subagent({
      agent: "general",
-     task: "You are BUILDING code in [project]. DO NOT PLAN — write actual file edits using the Edit and Write tools.\n\n## CRITICAL INSTRUCTIONS\n1. READ the files listed below first to understand the existing patterns\n2. USE the Edit tool to modify existing files — do NOT rewrite entire files\n3. RUN `cargo fmt --all`, then `cargo check --workspace`, then `cargo test --workspace` to validate\n4. COMMIT your work with: `git commit -am \"[commit message]\"`\n5. If cargo check fails, READ the error, READ the relevant source file, FIX the code with Edit tool, then re-run check\n6. DO NOT output planning text — output actual file changes\n\n## Issue to Fix\n[FULL TEXT from the todo item]\n\n## Instructions\n- Load the `review` skill for guidance on best practices\n- Fix the issue exactly as described\n- Validate your fix by running tests/linting/build\n- Update the corresponding todo in the todo list to \"completed\" using manage_todo_list\n- Commit your fix with a descriptive message\n- Work from: [directory]\n\n## Report back with:\n- Status: DONE | BLOCKED\n- What you fixed\n- Files changed",
+     task: "You are BUILDING code in [project]. DO NOT PLAN — write actual file edits using the Edit and Write tools.\n\n## CRITICAL INSTRUCTIONS\n1. READ the files listed below first to understand the existing patterns\n2. USE the Edit tool to modify existing files — do NOT rewrite entire files\n3. Run build, lint/vet, and the FULL test suite — ALL must pass, including pre-existing failures\n4. COMMIT your work with: `git commit -am \"[commit message]\"` — only after everything is green\n5. If any check fails, READ the error, READ the relevant source file, FIX the code with Edit tool, then re-run\n6. DO NOT output planning text — output actual file changes\n\n## Issue to Fix\n[FULL TEXT from the todo item]\n\n## Instructions\n- Load the `review` skill for guidance on best practices\n- Fix the issue exactly as described\n- Run the ENTIRE test suite — not just tests related to your change. Pre-existing failures must also be fixed before committing.\n- Update the corresponding todo in the todo list to \"completed\" using manage_todo_list\n- Commit your fix with a descriptive message\n- Work from: [directory]\n\n## Report back with:\n- Status: DONE | BLOCKED\n- What you fixed\n- Files changed",
      description: "Fix: [severity] <brief description>"
    })
    ```
@@ -126,7 +142,7 @@ Then follow the user's choice immediately — do NOT ask for additional confirma
    ```
    subagent({
      agent: "general",
-     task: "You are BUILDING code in [project]. DO NOT PLAN — write actual file edits using the Edit and Write tools.\n\n## CRITICAL INSTRUCTIONS\n1. READ the files listed below first to understand the existing patterns\n2. USE the Edit tool to modify existing files — do NOT rewrite entire files\n3. RUN `cargo fmt --all`, then `cargo check --workspace`, then `cargo test --workspace` to validate\n4. COMMIT your work with: `git commit -am \"[commit message]\"`\n5. If cargo check fails, READ the error, READ the relevant source file, FIX the code with Edit tool, then re-run check\n6. DO NOT output planning text — output actual file changes\n\n## Issue to Fix\n[FULL TEXT from the todo item]\n\n## Instructions\n- Load the `review` skill for guidance on best practices\n- Fix the issue exactly as described\n- Validate your fix by running tests/linting/build\n- Update the corresponding todo in the todo list to \"completed\" using manage_todo_list\n- Commit your fix with a descriptive message\n- Work from: [directory]\n\n## Report back with:\n- Status: DONE | BLOCKED\n- What you fixed\n- Files changed",
+     task: "You are BUILDING code in [project]. DO NOT PLAN — write actual file edits using the Edit and Write tools.\n\n## CRITICAL INSTRUCTIONS\n1. READ the files listed below first to understand the existing patterns\n2. USE the Edit tool to modify existing files — do NOT rewrite entire files\n3. Run build, lint/vet, and the FULL test suite — ALL must pass, including pre-existing failures\n4. COMMIT your work with: `git commit -am \"[commit message]\"` — only after everything is green\n5. If any check fails, READ the error, READ the relevant source file, FIX the code with Edit tool, then re-run\n6. DO NOT output planning text — output actual file changes\n\n## Issue to Fix\n[FULL TEXT from the todo item]\n\n## Instructions\n- Load the `review` skill for guidance on best practices\n- Fix the issue exactly as described\n- Run the ENTIRE test suite — not just tests related to your change. Pre-existing failures must also be fixed before committing.\n- Update the corresponding todo in the todo list to \"completed\" using manage_todo_list\n- Commit your fix with a descriptive message\n- Work from: [directory]\n\n## Report back with:\n- Status: DONE | BLOCKED\n- What you fixed\n- Files changed",
      description: "Fix: [severity] <brief description>"
    })
    ```
