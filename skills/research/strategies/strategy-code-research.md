@@ -136,40 +136,28 @@ When researching "how is X done in this codebase":
 | Configuration | env vars, config files, feature flags |
 | Testing | test files, mocks, fixtures, test utilities |
 
-## Subagent Usage
+## Angle Design for the Main Agent
 
-### `explore` — Fast Local Lookup
+This strategy is read by the **main agent** when planning research angles. The main agent dispatches all subagents. Subagents do not re-read this strategy or dispatch their own children.
 
-```typescript
-// Single quick lookup
-subagent({
-  agent: "explore",
-  task: "Find all files that reference 'database' or 'db' in the src/ directory."
-})
+### `explore` angles — fast local lookup
 
-// Parallel lookups
-subagent({
-  tasks: [
-    { agent: "explore", task: "Find authentication-related files" },
-    { agent: "explore", task: "Find database configuration files" }
-  ]
-})
-```
-
-### `researcher` — Deep Code + Web Analysis
+Use for: finding files, tracing imports, reading specific paths. Cheap and fast.
 
 ```typescript
-// External library research
-subagent({
-  agent: "researcher",
-  task: "Research how TanStack Query implements stale time checking. 
-         Clone the repo, find the implementation, and provide permalinks."
-})
-
-// Hybrid research
-subagent({
-  agent: "researcher",
-  task: "Compare how our codebase handles error handling vs. 
-         industry best practices for TypeScript/Node.js projects."
-})
+// Call each as a SEPARATE subagent tool call in one response:
+subagent({ agent: "explore", task: "Find all files that reference 'database' or 'db' in src/. Report file paths and line numbers." })
+subagent({ agent: "explore", task: "Trace the login() call chain from the API route to the DB call. Report each file:line." })
 ```
+
+### `researcher` angles — external library or hybrid web+local
+
+Use for: external library internals, web docs, or hybrid questions.
+
+```typescript
+// Call each as a SEPARATE subagent tool call in one response:
+subagent({ agent: "researcher", task: "Find how TanStack Query implements stale time checking. Clone the repo, find the implementation, return permalinks." })
+subagent({ agent: "researcher", task: "Search web for TypeScript error handling best practices. Return top 3 patterns with citations." })
+```
+
+**Each separate `subagent(...)` call in the same response runs in parallel and gets its own visible UI block. Never use `tasks:[...]` — that hides all children inside one block.**

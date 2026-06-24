@@ -101,51 +101,29 @@ Consult strategy guides as needed:
 
 ### Phase 2: Dispatch (main agent dispatches, never delegated)
 
-Dispatch all angles in parallel as a single `subagent` tool call with `tasks`:
+**Call `subagent` once per angle, all in the same response.** Do NOT use the `tasks` array — call the tool N times with a single `task` each. Pi executes parallel tool calls from the same response simultaneously, and each gets its own visible block in the UI.
 
 ```typescript
-// Standard — 2-3 parallel angles
-subagent({
-  tasks: [
-    {
-      agent: "researcher",
-      task: `Research angle: [SPECIFIC ANGLE 1]
+// Emit all of these as SEPARATE tool calls in ONE response:
 
-Your job: [exactly what to find, from where]
-Report: key facts with citations, gaps if any.`
-    },
-    {
-      agent: "researcher",
-      task: `Research angle: [SPECIFIC ANGLE 2]
+subagent({ agent: "researcher", task: `Angle 1: [specific angle]\n\nFind: [exactly what]\nSources: [web / local / specific URLs]\nReport: key facts with citations, gaps if any.` })
 
-Your job: [exactly what to find, from where]
-Report: key facts with citations, gaps if any.`
-    }
-  ]
-})
+subagent({ agent: "researcher", task: `Angle 2: [specific angle]\n\nFind: [exactly what]\nSources: [web / local / specific URLs]\nReport: key facts with citations, gaps if any.` })
 
-// Quick — single angle (use task not tasks)
+subagent({ agent: "researcher", task: `Angle 3: [specific angle]\n\nFind: [exactly what]\nSources: [web / local / specific URLs]\nReport: key facts with citations, gaps if any.` })
+
+// Quick — just one call
 subagent({ agent: "researcher", task: "Find: [specific thing]. Report findings with citations." })
-
-// Deep — 4-6 angles, all dispatched in one parallel call
-subagent({
-  tasks: [
-    { agent: "researcher", task: "Angle 1: ..." },
-    { agent: "researcher", task: "Angle 2: ..." },
-    { agent: "researcher", task: "Angle 3: ..." },
-    { agent: "researcher", task: "Angle 4: ..." },
-  ]
-})
 ```
 
-**Rules for angle tasks:**
-- One angle per researcher — no "research X and also Y"
+**Rules:**
+- One `subagent` call per angle — never bundle multiple angles into one call
+- Never use `tasks: [...]` for research — that hides all children inside one UI block
 - Be explicit about what sources to use (web, local files, specific URLs)
-- Include what to report and in what format
-- Do NOT tell them to plan, synthesise, or dispatch — they are leaves
+- Do NOT tell researchers to plan, synthesise, or dispatch — they are leaves
 
 **Failure modes during dispatch:**
-- Subagent returns nothing → note as gap, try a follow-up angle if critical
+- Subagent returns nothing → note as gap, try a follow-up call if critical
 - Subagent times out → note timeout, skip angle and note gap
 
 ### Phase 3: Synthesise (main agent only)

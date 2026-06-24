@@ -62,7 +62,7 @@ React useId hook — https://react.dev/reference/react/useId
 
 ### When Docs Are Missing or Unclear
 
-1. Check the source code directly (use `researcher` to search the repo)
+1. Check the source code directly (the main agent dispatches a `researcher` angle for this)
 2. Check GitHub issues for discussions about the behavior
 3. Check Stack Overflow for community interpretations
 4. Note in your report that official docs are incomplete
