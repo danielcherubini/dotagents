@@ -1,7 +1,6 @@
 ---
 name: general
 description: General-purpose subagent for implementing a single task from an approved plan
-tools: read, bash, edit, write, grep, find, ls, web_search, code_search, fetch_content, get_search_content, manage_todo_list
 model: tama/whatevers-hot-n-fresh
 mode: subagent
 subtask: "true"

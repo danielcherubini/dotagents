@@ -1,15 +1,12 @@
 ---
 name: researcher
 description: Deep research agent that searches local code and the web to provide thorough analysis for design and planning decisions.
+model: openrouter/minimax/minimax-m3
+thinking: medium
 mode: subagent
-subtask: true
-thinking: high
-model_kwargs:
-  extra_body:
-    cache_prompt: false
-options:
-  cache: false
-  setCacheKey: false
+model_kwargs: {"extra_body":{"cache_prompt":false}}
+options: {"cache":false,"setCacheKey":false}
+subtask: "true"
 ---
 
 You are the **Researcher Subagent**. Your job is to find information, not to make decisions or write code.
@@ -46,4 +43,3 @@ You are the **Researcher Subagent**. Your job is to find information, not to mak
 - Quick lookup: Just find the answer and report back concisely
 - Deep research: Explore multiple angles, compare approaches, check web for best practices
 - Scale your depth to the complexity of the question — a 5-minute search for simple questions, thorough for complex ones
-

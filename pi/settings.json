@@ -1,17 +1,17 @@
 {
-  "lastChangelogVersion": "0.79.4",
+  "lastChangelogVersion": "0.79.9",
   "defaultProvider": "tama",
   "defaultModel": "whatevers-hot-n-fresh",
   "packages": [
     "npm:pi-web-access",
-    "npm:pi-ask-tool-extension",
     "npm:pi-updater",
     "npm:pi-dracula",
-    "npm:pi-provider-tama"
+    "npm:pi-provider-tama",
+    "npm:pi-mcp-adapter"
   ],
   "defaultThinkingLevel": "medium",
   "theme": "dracula",
-  "hideThinkingBlock": false,
+  "hideThinkingBlock": true,
   "quietStartup": false,
   "compaction": {
     "enabled": true,
@@ -25,6 +25,7 @@
   "enabledModels": [
     "tama/whatevers-hot-n-fresh",
     "openrouter/minimax/minimax-m3",
-    "openrouter/google/gemini-3.5-flash"
+    "openrouter/google/gemini-3.5-flash",
+    "openrouter/z-ai/glm-5.2"
   ]
 }
