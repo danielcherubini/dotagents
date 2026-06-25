@@ -6,6 +6,31 @@ description: Use when you have a written implementation plan to execute
 # Execute Plan
 
 Read the plan, create a feature branch, dispatch subagents per task, review the branch, open a PR.
+
+## Plan Selection
+
+If no plan file path is provided by the user:
+
+1. **Read the plans index** — Load `docs/plans/README.md` (or the project's equivalent plan index) to find available plans.
+2. **Identify candidates** — Collect all plans marked as 🚧 IN PROGRESS or 📋 DRAFT / ❌ NOT STARTED (exclude ✅ COMPLETED, 🔁 SUPERSEDED, and any "remaining work" / roadmap items that lack a plan file).
+3. **Ask the user** which plan to execute:
+
+```
+ask({
+  questions: [{
+    id: "plan",
+    question: "Which plan would you like to execute?",
+    options: [
+      { label: "[Plan Name] — [short description]" },
+      ...
+    ]
+  }]
+})
+```
+
+4. If only one candidate exists, you may skip asking and proceed directly.
+5. Once selected, read the full plan file and continue to Branch Setup.
+
 ## Branch Setup
 - Create feature branch using gitflow conventions (load `gitflow-branching` skill if needed)
 - Create a todo list with `manage_todo_list` with all tasks from the plan

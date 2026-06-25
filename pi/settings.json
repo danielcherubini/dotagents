@@ -1,5 +1,5 @@
 {
-  "lastChangelogVersion": "0.79.9",
+  "lastChangelogVersion": "0.80.2",
   "defaultProvider": "tama",
   "defaultModel": "whatevers-hot-n-fresh",
   "packages": [
@@ -11,7 +11,7 @@
   ],
   "defaultThinkingLevel": "medium",
   "theme": "dracula",
-  "hideThinkingBlock": true,
+  "hideThinkingBlock": false,
   "quietStartup": false,
   "compaction": {
     "enabled": true,
