@@ -536,7 +536,16 @@ Follow the TDD cycle:
 
 ### RED: Write Failing Test (Baseline)
 
-Run pressure scenario with subagent WITHOUT the skill. Document exact behavior:
+Run pressure scenario with a **general subagent** WITHOUT the skill:
+
+```
+subagent({
+  agent: "general",
+  task: "[Describe the pressure scenario — give the agent the task that would trigger a rule violation without the skill]"
+})
+```
+
+Document exact behavior:
 - What choices did they make?
 - What rationalizations did they use (verbatim)?
 - Which pressures triggered violations?
@@ -547,7 +556,16 @@ This is "watch the test fail" - you must see what agents naturally do before wri
 
 Write skill that addresses those specific rationalizations. Don't add extra content for hypothetical cases.
 
-Run same scenarios WITH skill. Agent should now comply.
+Run same scenarios WITH skill using a **general subagent**:
+
+```
+subagent({
+  agent: "general",
+  task: "[Same pressure scenario as RED — give the agent the task]"
+})
+```
+
+Agent should now comply.
 
 ### REFACTOR: Close Loopholes
 

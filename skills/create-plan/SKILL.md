@@ -74,7 +74,16 @@ Each task must be independently commitable. The agent executing it has no contex
 
 ## After Plan is Written
 
-Dispatch the **reviewer subagent** to review the plan (use review type: "plan"). Fix issues (max 3 rounds).
+Dispatch the **reviewer subagent** to review the plan:
+
+```
+subagent({
+  agent: "reviewer",
+  task: "Review type: plan. Review the following implementation plan at `docs/plans/YYYY-MM-DD-<feature>.md`. Check for completeness, clarity, and feasibility."
+})
+```
+
+Fix issues (max 3 rounds).
 
 Then update `docs/plans/README.md`:
 1. Add the new plan to the appropriate category table with status 🚧 IN PROGRESS

@@ -99,7 +99,14 @@ Then follow the user's choice immediately — do NOT ask for additional confirma
 
 ### Code review then PR
 
-1. Dispatch the **reviewer subagent** with: "Review the implementation against the plan at `docs/plans/YYYY-MM-DD-<feature>.md`. Check that all acceptance criteria are met and no planned work was missed."
+1. Dispatch the **reviewer subagent**:
+
+   ```
+   subagent({
+     agent: "reviewer",
+     task: "Review type: implementation. Review the implementation against the plan at `docs/plans/YYYY-MM-DD-<feature>.md`. Check that all acceptance criteria are met and no planned work was missed."
+   })
+   ```
 2. Fix any critical/major issues from reviewer verdict
 3. Load the `review` skill to conduct a thorough code review
 4. **Clear the todo list** — remove all old task entries
@@ -126,7 +133,14 @@ Then follow the user's choice immediately — do NOT ask for additional confirma
 
 ### Code review only
 
-1. Dispatch the **reviewer subagent** with: "Review the implementation against the plan at `docs/plans/YYYY-MM-DD-<feature>.md`. Check that all acceptance criteria are met and no planned work was missed."
+1. Dispatch the **reviewer subagent**:
+
+   ```
+   subagent({
+     agent: "reviewer",
+     task: "Review type: implementation. Review the implementation against the plan at `docs/plans/YYYY-MM-DD-<feature>.md`. Check that all acceptance criteria are met and no planned work was missed."
+   })
+   ```
 2. Fix any critical/major issues from reviewer verdict
 3. Load the `review` skill to conduct a thorough code review
 4. **Clear the todo list** — remove all old task entries

@@ -43,7 +43,15 @@ ask({
 ```
 
 If the user chooses "Run a reviewer", THEN:
-1. Dispatch the **reviewer subagent** with: "Review type: spec"
+1. Dispatch the **reviewer subagent**:
+
+   ```
+   subagent({
+     agent: "reviewer",
+     task: "Review type: spec. Review the following spec: [paste the approved spec here]"
+   })
+   ```
+
 2. Present the reviewer's feedback
 3. If the reviewer found issues, address them or ask the user how to proceed
 4. After review is done (or if user skips), re-ask the question about what to do next
