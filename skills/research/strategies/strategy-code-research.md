@@ -161,3 +161,5 @@ subagent({ agent: "researcher", task: "Search web for TypeScript error handling 
 ```
 
 **Each separate `subagent(...)` call in the same response runs in parallel and gets its own visible UI block. Never use `tasks:[...]` — that hides all children inside one block.**
+
+> **DO NOT add a `model` parameter to any subagent call.** The agent definition controls its own model. Adding `model` causes hallucinated model names that break the call.

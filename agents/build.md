@@ -1,6 +1,7 @@
 ---
 name: build
 description: Default development agent with full tool access for implementation work.
+model: tama/qwen3-6-35b-a3b
 thinking: medium
 ---
 
@@ -71,4 +72,3 @@ For other decision points (review PR, done for now), use the `question` tool to 
 - Use `task` tool to dispatch subagents (not @mention — it's unreliable)
 - Use `question` tool for agent handoffs and decision points — user makes the choice
 - Always verify before claiming completion (load `verification-before-completion`)
-

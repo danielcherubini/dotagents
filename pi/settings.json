@@ -1,7 +1,7 @@
 {
   "lastChangelogVersion": "0.80.2",
   "defaultProvider": "tama",
-  "defaultModel": "whatevers-hot-n-fresh",
+  "defaultModel": "qwen3-6-27b",
   "packages": [
     "npm:pi-web-access",
     "npm:pi-updater",
@@ -23,9 +23,9 @@
     "showTerminalProgress": false
   },
   "enabledModels": [
-    "tama/whatevers-hot-n-fresh",
     "openrouter/minimax/minimax-m3",
-    "openrouter/google/gemini-3.5-flash",
-    "openrouter/z-ai/glm-5.2"
+    "openrouter/z-ai/glm-5.2",
+    "tama/qwen3-6-27b",
+    "tama/qwen3-6-35b-a3b"
   ]
 }

@@ -1,7 +1,7 @@
 ---
 name: explore
 description: Fast cheap local file lookup for codebase search and reading. Primary agent for quick file questions.
-model: tama/fast
+model: tama/qwen3-6-35b-a3b
 mode: subagent
 subtask: "true"
 ---

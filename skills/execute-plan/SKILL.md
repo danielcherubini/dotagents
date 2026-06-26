@@ -51,49 +51,23 @@ Document the baseline results in your working notes so you know which failures w
 
 ## Task Dispatch Protocol
 
-For each task, dispatch a `general` subagent (sequentially, not parallel):
+For each task, dispatch the `general` agent (sequentially, not parallel).
+
+> **DO NOT add a `model` parameter to any subagent call.** The agent definition controls its own model. Adding `model` causes hallucinated model names that break the call.
 
 ```
-Subagent prompt template:
+subagent({
+  agent: "general",
+  task: "[FULL TEXT of task from plan — paste it, don't make the agent read a file]\n\nContext: [where this fits, dependencies, what's already done]",
   description: "Implement Task N: [task name]"
-  prompt: |
-    You are BUILDING code in [project]. DO NOT PLAN — write actual file edits using the Edit and Write tools.
-
-    ## CRITICAL INSTRUCTIONS
-    1. READ the files listed below first to understand the existing patterns
-    2. USE the Edit tool to modify existing files — do NOT rewrite entire files
-    3. USE the Write tool to create new files
-    4. Run build, lint/vet, and the FULL test suite to validate — ALL must pass
-    5. COMMIT your work with: `git commit -am "[commit message]"` — only after everything is green
-    6. If any check fails, READ the error, READ the relevant source file, FIX the code with Edit tool, then re-run
-    7. DO NOT output planning text — output actual file changes
-
-    ## Task
-    [FULL TEXT of task from plan - paste it, don't make subagent read file]
-
-    ## Context
-    [Where this fits, dependencies, what's already done]
-
-    ## Instructions
-    - Implement exactly what the task specifies
-    - Write tests (TDD: failing test first, then implementation)
-    - Validate your work by running each step **independently and in order** — wait for each to finish before starting the next:
-      1. Formatting (e.g. `cargo fmt`, `prettier`, `gofmt`, etc.)
-      2. Build / compile (e.g. `cargo build`, `npm run build`, `go build ./...`, etc.)
-      3. Tests — **the entire test suite**, not just the new tests (e.g. `cargo test`, `npm test`, `go test ./...`, etc.)
-      4. Lint / vet (e.g. `go vet ./...`, `eslint`, `clippy`, etc.)
-    - **ALL checks must pass — including pre-existing failures.** A test that was already broken before your task is still your responsibility to fix. The CI gate rejects the PR regardless of when the failure was introduced. If you cannot fix a pre-existing failure, report BLOCKED before committing.
-    - If any step fails: **STOP. Do not re-run it yet.** Read the error output, read the relevant source files, then use Edit/Write tools to fix the root cause. Only re-run after you have made file changes.
-    - **Loop-break rule:** If you run a step and it fails, and you have made no file edits since the last time it failed, you are looping. Stop immediately and report back with status BLOCKED — describe the error and what you tried.
-    - Commit your work with a descriptive message
-    - Work from: [directory]
-
-    ## Report back with:
-    - Status: DONE | BLOCKED | NEEDS_CONTEXT
-    - What you implemented
-    - Files changed
-    - Any concerns
+})
 ```
+
+The `general` agent already knows to:
+- Load TDD skill and follow RED-GREEN-REFACTOR
+- Validate format → build → test → lint in order
+- Commit with a descriptive message
+- Report DONE | BLOCKED | NEEDS_CONTEXT
 
 **Handle subagent responses:**
 - **DONE:** Mark task complete in todo list, move to next task
@@ -140,7 +114,7 @@ Then follow the user's choice immediately — do NOT ask for additional confirma
    ```
    subagent({
      agent: "general",
-     task: "You are BUILDING code in [project]. DO NOT PLAN — write actual file edits using the Edit and Write tools.\n\n## CRITICAL INSTRUCTIONS\n1. READ the files listed below first to understand the existing patterns\n2. USE the Edit tool to modify existing files — do NOT rewrite entire files\n3. Run build, lint/vet, and the FULL test suite — ALL must pass, including pre-existing failures\n4. COMMIT your work with: `git commit -am \"[commit message]\"` — only after everything is green\n5. If any check fails, READ the error, READ the relevant source file, FIX the code with Edit tool, then re-run\n6. DO NOT output planning text — output actual file changes\n\n## Issue to Fix\n[FULL TEXT from the todo item]\n\n## Instructions\n- Load the `review` skill for guidance on best practices\n- Fix the issue exactly as described\n- Run the ENTIRE test suite — not just tests related to your change. Pre-existing failures must also be fixed before committing.\n- Update the corresponding todo in the todo list to \"completed\" using manage_todo_list\n- Commit your fix with a descriptive message\n- Work from: [directory]\n\n## Report back with:\n- Status: DONE | BLOCKED\n- What you fixed\n- Files changed",
+     task: "Fix the following issue:\n\n[FULL TEXT from the todo item]\n\nLoad the `review` skill for guidance on best practices. Update the corresponding todo in the todo list to \"completed\" using manage_todo_list.",
      description: "Fix: [severity] <brief description>"
    })
    ```
@@ -167,7 +141,7 @@ Then follow the user's choice immediately — do NOT ask for additional confirma
    ```
    subagent({
      agent: "general",
-     task: "You are BUILDING code in [project]. DO NOT PLAN — write actual file edits using the Edit and Write tools.\n\n## CRITICAL INSTRUCTIONS\n1. READ the files listed below first to understand the existing patterns\n2. USE the Edit tool to modify existing files — do NOT rewrite entire files\n3. Run build, lint/vet, and the FULL test suite — ALL must pass, including pre-existing failures\n4. COMMIT your work with: `git commit -am \"[commit message]\"` — only after everything is green\n5. If any check fails, READ the error, READ the relevant source file, FIX the code with Edit tool, then re-run\n6. DO NOT output planning text — output actual file changes\n\n## Issue to Fix\n[FULL TEXT from the todo item]\n\n## Instructions\n- Load the `review` skill for guidance on best practices\n- Fix the issue exactly as described\n- Run the ENTIRE test suite — not just tests related to your change. Pre-existing failures must also be fixed before committing.\n- Update the corresponding todo in the todo list to \"completed\" using manage_todo_list\n- Commit your fix with a descriptive message\n- Work from: [directory]\n\n## Report back with:\n- Status: DONE | BLOCKED\n- What you fixed\n- Files changed",
+     task: "Fix the following issue:\n\n[FULL TEXT from the todo item]\n\nLoad the `review` skill for guidance on best practices. Update the corresponding todo in the todo list to \"completed\" using manage_todo_list.",
      description: "Fix: [severity] <brief description>"
    })
    ```

@@ -121,6 +121,7 @@ subagent({ agent: "researcher", task: "Find: [specific thing]. Report findings w
 - Never use `tasks: [...]` for research — that hides all children inside one UI block
 - Be explicit about what sources to use (web, local files, specific URLs)
 - Do NOT tell researchers to plan, synthesise, or dispatch — they are leaves
+- **DO NOT add a `model` parameter to any subagent call.** The agent definition controls its own model. Adding `model` causes hallucinated model names that break the call.
 
 **Failure modes during dispatch:**
 - Subagent returns nothing → note as gap, try a follow-up call if critical
