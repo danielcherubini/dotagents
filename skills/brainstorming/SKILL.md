@@ -56,13 +56,9 @@ If the user chooses "Run a reviewer", THEN:
 3. If the reviewer found issues, address them or ask the user how to proceed
 4. After review is done (or if user skips), re-ask the question about what to do next
 
-If the user chooses "Create implementation plan", respond:
-
-> "OK then. When you're ready, just say the word and I'll load the **create-plan** skill to turn this spec into an implementation plan."
-
-When the user confirms, load the `create-plan` skill and invoke it — do not start planning on your own. The `create-plan` skill handles the entire planning process.
-
-**Clear the todo list** — use `manage_todo_list` to remove all entries now that brainstorming is complete.
+If the user chooses "Create implementation plan":
+1. **Clear the todo list** — use `manage_todo_list` to remove all entries now that brainstorming is complete.
+2. Immediately load the `create-plan` skill and invoke it. The `create-plan` skill handles the entire planning process.
 
 If the user chooses "Save spec for later", THEN:
 1. Write it to `docs/plans/YYYY-MM-DD-<topic>-spec.md`

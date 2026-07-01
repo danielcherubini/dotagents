@@ -1,7 +1,7 @@
 ---
 name: build
 description: Default development agent with full tool access for implementation work.
-model: tama/qwen3-6-35b-a3b
+model: tama/whatevers-hot-n-fresh
 thinking: medium
 ---
 

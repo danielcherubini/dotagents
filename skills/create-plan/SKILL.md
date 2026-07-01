@@ -79,7 +79,7 @@ Dispatch the **reviewer subagent** to review the plan:
 ```
 subagent({
   agent: "reviewer",
-  task: "Review type: plan. Review the following implementation plan at `docs/plans/YYYY-MM-DD-<feature>.md`. Check for completeness, clarity, and feasibility."
+  task: "Review type: plan execution review. Review the implementation plan at `docs/plans/YYYY-MM-DD-<feature>.md`. This is NOT a review of the plan file as a document — it is a review of the plan against the actual codebase that will be modified. Read every file the plan references (creates, modifies, tests). Read any additional files needed to verify the plan is correct: existing interfaces, types, imports, dependencies, build configs, and related modules. Report anything the plan should do differently: missing files, wrong paths, incorrect signatures, overlooked edge cases, integration gaps, or anything the executing agent would get wrong. If you need to read the whole codebase to be sure, do it. The plan will be executed verbatim by an agent with no context — leave no stone unturned."
 })
 ```
 
@@ -92,11 +92,7 @@ Then update `docs/plans/README.md`:
 
 **CRITICAL: Do NOT begin implementing any tasks in the plan. The `create-plan` skill ends once the plan is vetted and presented to the user. You must wait for explicit user approval before transitioning to implementation/execution.**
 
-Then tell the user the plan is ready and ask them to say when they're ready to start implementing:
-
-> "The implementation plan is ready. When you're ready, just say the word and I'll load the `execute-plan` skill to turn this spec into an implementation plan."
-
-When the user confirms, load the `execute-plan` skill and invoke it — do not start planning on your own. The `execute-plan` skill handles the entire planning process.
+Then tell the user the plan is ready, and immediately load the `execute-plan` skill to begin implementation.
 
 **Clear the todo list** — use `manage_todo_list` to remove all entries now that planning is complete.
 
