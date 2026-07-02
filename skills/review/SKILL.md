@@ -19,6 +19,82 @@ allowed-tools:
 
 Transform code reviews from gatekeeping to knowledge sharing through constructive feedback, systematic analysis, and collaborative improvement.
 
+## Architecture — Read This First
+
+```
+Main agent (YOU — running this skill)
+  ├── Phase 1: Dispatch explore subagent(s) for context gathering
+  │     ├── explore: gather files, diff, related code, CI status  ← pure leaf
+  │     └── (optional) explore: additional angles (tests, docs)  ← pure leaf
+  ├── Phase 2: Synthesize context → classify change, determine scope
+  ├── Phase 3: Dispatch reviewer subagent with enriched brief
+  │     └── reviewer: reads code, runs checks, returns report     ← pure leaf
+  ├── Phase 4: Main agent presents report → calls ask()           ← YOU interact
+  ├── Phase 5: (user responds) Main agent fixes selected issues
+  └── Phase 6: Re-verify fixes, recommend merge
+```
+
+**You (the main agent) own orchestration AND user interaction.** Two subagent types, both pure leaves:
+
+1. **explore** — gathers context: files to review, diffs, related code, test coverage, CI status, docs. Returns a concise context brief.
+2. **reviewer** — receives the context brief + review scope from the main agent. Reads code, runs lint/test commands, performs analysis, returns a categorized report.
+
+**Subagents never interact with the user.** The reviewer returns its findings as a report. The main agent presents the report to the user and calls `ask()`. No subagent ever fixes code or calls `ask()`.
+
+### Phase 1: Dispatch explore subagent(s)
+
+Use `subagent` with `agent: "explore"` to gather context. Dispatch one or more in parallel:
+
+```
+subagent({
+  agent: "explore",
+  task: "Gather review context for [target]. Find all changed files, " +
+        "related imports/callers, test coverage, and any CI/lint status. " +
+        "Return a concise brief: files, scope, languages, and risk areas."
+})
+```
+
+For large changes, dispatch multiple explore subagents in parallel:
+- One for the changed files and their dependencies
+- One for tests and CI status
+- One for docs and related ADRs/plans
+
+### Phase 2: Synthesize and classify
+
+The main agent collects all explore results, classifies the change (bug fix, feature, refactor, security), determines review depth, and identifies focus areas.
+
+### Phase 3: Dispatch reviewer subagent
+
+Use `subagent` with `agent: "reviewer"` and pass the synthesized context:
+
+```
+subagent({
+  agent: "reviewer",
+  task: "Review the following for [scope]: [files/context from explore]. " +
+        "Change type: [classification]. Depth: [quick/standard/deep]. " +
+        "Focus areas: [correctness, security, perf, etc.]. " +
+        "Follow the review skill reviewer checklist. " +
+        "Consult [language] guide. Return a report categorized by severity. " +
+        "Do NOT call ask() — just return the report."
+})
+```
+
+The reviewer subagent **returns a report only** — it never calls `ask()` and never fixes code.
+
+### Phase 4: Present report and ask
+
+The main agent receives the reviewer's report, displays it to the user, and calls `ask()` to let the user choose what to fix. **This is the only point of user interaction.**
+
+### When to use subagents vs. review inline
+
+| Scenario | Approach |
+|---|---|
+| Single file, < 100 lines, trivial change | Inline review (no subagents) |
+| Multiple files or > 100 lines | **explore → reviewer → present → ask** pipeline |
+| Cross-cutting concern (security, perf, architecture) | **explore → reviewer** with focused scope |
+| User says "review" without specifics | **explore → reviewer → present → ask** pipeline |
+| Large change (> 400 lines) | **Multiple explore** in parallel → **reviewer → present → ask** |
+
 ## When to Use This Skill
 
 - Reviewing pull requests and code changes
@@ -114,78 +190,60 @@ Transform code reviews from gatekeeping to knowledge sharing through constructiv
 
 ## Review Process
 
-### Phase 1: Context Gathering (2-5 minutes)
+See [Architecture](#architecture--read-this-first) for the high-level flow. This section expands each phase with detailed checklists.
 
-Before diving into code, understand the full picture:
+### Explore Subagent — What to Gather
 
-1. **Read PR description carefully**
-   - What problem does it solve?
-   - What are the acceptance criteria?
-   - Are there linked issues or design docs?
+The explore subagent collects:
+- Changed files and their contents
+- Related imports, callers, and dependencies
+- Test coverage for affected code
+- CI/lint/build status
+- PR description, linked issues, design docs
 
-2. **Check PR size**
-   - < 100 lines: Full review appropriate
-   - 100-400 lines: Full review, focus on critical paths
-   - 400-800 lines: Focus on critical paths, suggest splitting
-   - > 800 lines: Request split into smaller PRs
+For large changes (> 400 lines), dispatch multiple explore subagents in parallel:
+- **explore 1:** Changed files + dependencies + related patterns
+- **explore 2:** Tests + CI status + coverage gaps
+- **explore 3:** Docs + ADRs + migration notes
 
-3. **Review CI/CD status**
-   - Are tests passing?
-   - Is linting clean?
-   - Are there build warnings?
+### Main Agent — Classification Checklist
 
-4. **Understand the business requirement**
-   - Who is this for?
-   - What's the user impact?
-   - What happens if this breaks?
+After collecting explore results, classify:
+1. **Change type** — bug fix, feature, refactor, security, perf
+2. **Review depth** — quick (< 100 lines), standard (100-400), deep (> 400)
+3. **Focus areas** — correctness, security, performance, architecture
+4. **Risk level** — based on affected code paths and test coverage
 
-5. **Note architectural decisions**
-   - New dependencies?
-   - API changes?
-   - Database schema changes?
-   - Breaking changes for users?
+Checklist:
+- [ ] What problem does this solve? (from PR description)
+- [ ] What's the PR size? (lines changed, files touched)
+- [ ] Are tests passing? Is linting clean?
+- [ ] Who is this for? What's the user impact?
+- [ ] New dependencies? API changes? Schema changes? Breaking changes?
+- [ ] How does this interact with existing code?
 
-6. **Check related code**
-   - How does this interact with existing code?
-   - Are there similar patterns elsewhere?
-   - Does this follow existing conventions?
+### Reviewer Checklist (what the reviewer subagent does)
 
-### Phase 2: High-Level Review (5-15 minutes)
+The reviewer subagent follows this checklist for each changed file:
 
-Start with the big picture before diving into details:
+#### Architecture & Design
+- Does the solution fit the problem?
+- Are there anti-patterns?
+- Is the design scalable?
+- Consult [Architecture Review Guide](guides/guide-architecture-review.md)
 
-1. **Architecture & Design**
-   - Does the solution fit the problem?
-   - Are there anti-patterns?
-   - Is the design scalable?
-   - Consult [Architecture Review Guide](guides/guide-architecture-review.md)
+#### Performance
+- Algorithm complexity (Big-O)
+- Memory usage patterns
+- N+1 queries or excessive API calls
+- Unnecessary allocations
+- Consult [Performance Review Guide](guides/guide-performance-review.md)
 
-2. **Performance Assessment**
-   - Algorithm complexity (Big-O)
-   - Memory usage patterns
-   - N+1 queries or excessive API calls
-   - Unnecessary allocations
-   - Consult [Performance Review Guide](guides/guide-performance-review.md)
-
-3. **Security Assessment**
-   - Input validation
-   - Authentication/authorization
-   - Data exposure risks
-   - Consult [Security Review Guide](guides/guide-security-review.md)
-
-4. **Testing Strategy**
-   - Are tests covering edge cases?
-   - Are tests meaningful or just exercising code?
-   - Is there test coverage for error paths?
-
-5. **File Organization**
-   - Are new files in the right places?
-   - Is there logical grouping?
-   - Are there unnecessary files?
-
-### Phase 3: Line-by-Line Review (15-30 minutes)
-
-For each changed file, systematically check:
+#### Security
+- Input validation
+- Authentication/authorization
+- Data exposure risks
+- Consult [Security Review Guide](guides/guide-security-review.md)
 
 #### Correctness
 - Logic errors or off-by-one mistakes
@@ -194,23 +252,15 @@ For each changed file, systematically check:
 - Concurrency issues (race conditions, deadlocks, TOCTOU)
 - State machine transitions complete and valid
 
-#### Security
-- Input validation and sanitization
-- SQL injection prevention (parameterized queries)
-- XSS prevention (output encoding)
-- Authentication/authorization checks
-- Sensitive data handling (PII, credentials, tokens)
-- CSRF protection (for state-changing operations)
-- Rate limiting (for public APIs)
-- Dependency security (known vulnerabilities)
+#### Testing
+- Are tests covering edge cases?
+- Are tests meaningful or just exercising code?
+- Is there test coverage for error paths?
 
-#### Performance
-- Algorithmic complexity (avoid O(n²) when O(n) is possible)
-- Database query efficiency (N+1 queries, missing indexes)
-- Memory usage patterns (memory leaks, excessive allocations)
-- Unnecessary allocations or copies
-- Hot path optimization opportunities
-- Lazy evaluation vs eager evaluation
+#### File Organization
+- Are new files in the right places?
+- Is there logical grouping?
+- Are there unnecessary files?
 
 #### Maintainability
 - Clear naming conventions (express intent, not implementation)
@@ -227,21 +277,24 @@ For each changed file, systematically check:
 - Migration guides for breaking changes
 - Changelog entries for user-facing changes
 
-### Phase 4: PRESENT FINDINGS AND ASK WHAT TO FIX (REQUIRED — HARD STOP)
+### Main agent presents report and calls ask() — HARD STOP
 
 > 🛑 **HARD STOP POINT — READ THIS FIRST**
 >
-> This is the **ONLY** place in the entire review process where you must pause and wait for user input. After presenting findings, your job is DONE until the user responds.
+> After the reviewer subagent returns its report, the **main agent** presents the findings to the user and calls `ask()`. This is the **ONLY** place in the entire review process where execution pauses for user input.
+>
+> **The reviewer subagent never calls `ask()`.** It returns a report. The main agent presents it and asks.
 >
 > **EXECUTION FLOW (MUST follow this exact sequence):**
 > ```
-> Phase 3 (Line-by-line review) → Present Summary → call ask() → [STOP — WAIT] → (user responds) → Phase 5
->                                                              ↑
->                                                              └── YOU MUST STOP HERE. NOTHING ELSE.
+> reviewer returns report → main agent presents to user → main agent calls ask() → [STOP — WAIT] → (user responds) → main agent fixes
+>                                                                                                              ↑
+>                                                                                                              └── HARD STOP.
 > ```
 >
-> **PRE-FLIGHT CHECKLIST (Complete ALL before proceeding):**
-> - [ ] I have presented the summary of findings ✅
+> **Main agent PRE-FLIGHT CHECKLIST (Complete ALL before proceeding):**
+> - [ ] I have received the reviewer's report ✅
+> - [ ] I have presented the findings to the user ✅
 > - [ ] I have called `ask()` with the fix-priority question ✅
 > - [ ] I am NOT about to fix, suggest, or modify any code ✅
 > - [ ] I am waiting for user input before doing anything else ✅
@@ -249,21 +302,23 @@ For each changed file, systematically check:
 > **❌ NEVER do any of these:**
 > - Present findings and then immediately start fixing issues
 > - Say "What would you like to do?" in plain text instead of using `ask()`
-> - Begin Phase 5 fixes before receiving a response from `ask()`
+> - Begin fixes before receiving a response from `ask()`
 > - Assume the user wants everything fixed — let them choose
-> - Continue reading code after presenting findings
-> - Suggest fixes without waiting for user selection
+> - Have the reviewer subagent call `ask()` — only the main agent calls `ask()`
 >
 > **✅ ALWAYS do this — IN EXACT ORDER:**
-> 1. Present the summary (count and categorize all findings)
-> 2. Call `ask()` with the exact question format shown below
-> 3. STOP. Wait for the user's response.
+> 1. Receive reviewer's report
+> 2. Present the findings to the user (count and categorize)
+> 3. Call `ask()` with the question format below
+> 4. STOP. Wait for the user's response.
 >
-> **This is a hard break in your execution flow.** You must not proceed to Phase 5 until `ask()` returns with a user answer.
+> **This is a hard break in execution.** After `ask()` the main agent waits — nothing happens until the user responds.
 >
 > **VIOLATION DETECTION:** If you find yourself about to fix, suggest, or modify code after presenting findings, you have violated this rule. Go back and call `ask()` first.
 
-#### Step 1: Count and categorize all findings
+#### Report format
+
+Tally findings from the reviewer's report:
 
 ```typescript
 // Tally your findings:
@@ -275,7 +330,7 @@ let countLearning = 0;    // 📚 Educational, no action needed
 let countPraise = 0;      // 🎉 Good work, keep it up!
 ```
 
-#### Step 2: Present a summary of findings FIRST
+#### Present the summary to the user
 
 ```markdown
 ## Code Review Summary
@@ -304,7 +359,7 @@ let countPraise = 0;      // 🎉 Good work, keep it up!
 1. [Positive feedback] - `file.ts:300`
 ```
 
-#### Step 3: CALL ask() IMMEDIATELY after the summary
+#### Call ask() immediately after presenting
 
 ```typescript
 ask({
@@ -322,17 +377,17 @@ ask({
 })
 ```
 
-#### Step 4: STOP and WAIT for user response
+#### STOP and wait for user response
 
-After calling `ask()`, your review is complete. Do nothing else. Do not start fixing. Do not suggest fixes. Wait for the user to respond, then proceed to Phase 5 based on their answer.
+After calling `ask()`, the review is complete. Do nothing else. Do not start fixing. Do not suggest fixes. Wait for the user to respond, then proceed to Phase 5 based on their answer.
 
 **If you skip this step or bypass ask(), you have violated a core rule of the review process.**
 
-### Phase 5: Fix Issues (Based on User Choice)
+### Phase 5: Main agent fixes issues (Based on User Choice)
 
-**⚠️ You may ONLY enter this phase after `ask()` has returned a user response.** If you are here without having called `ask()` first, you have made an error — go back to Phase 4.
+**⚠️ The main agent handles all fixes — the reviewer subagent never fixes code.**
 
-Fix issues ONE AT A TIME based on user's selection. For each issue:
+After `ask()` returns with the user's selection, the main agent fixes issues ONE AT A TIME:
 1. Explain the problem clearly
 2. Show the fix
 3. Verify with tests/linting
