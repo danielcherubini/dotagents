@@ -11,16 +11,16 @@ Turn an approved design into a structured implementation plan with independent, 
 
 ## When to Use
 
-- After brainstorming/design is complete and user has approved the approach
+- After discussion/design is complete and user has approved the approach
 - When work is large enough to benefit from task breakdown (2+ tasks)
 
 **Don't use when:**
-- Idea isn't fleshed out yet — use `brainstorming` first
+- Idea isn't fleshed out yet — use `discuss` first
 - Change is small enough to implement directly (single file, obvious fix)
 
 ## Input
 
-This skill expects an approved design spec. The spec comes from the conversation — it was already presented and approved during brainstorming. Do NOT read from a file unless one was explicitly saved earlier.
+This skill expects an approved design spec. The spec comes from the conversation — it was already presented and approved during discussion. Do NOT read from a file unless one was explicitly saved earlier.
 
 ## Plan Format
 
@@ -103,5 +103,5 @@ Then tell the user the plan is ready, and immediately load the `execute-plan` sk
 | Tasks that depend on each other's uncommitted work | Make each task independently commitable |
 | Vague file paths ("update the config") | Use exact paths: `src/config/auth.ts` |
 | Skipping TDD steps in task template | Every task needs failing test → implement → pass |
-| Planning before design is agreed | Use `brainstorming` first to align on approach |
+| Planning before design is agreed | Use `discuss` first to align on approach |
 | Too many tasks (10+) | Group related changes; aim for 3-7 tasks |

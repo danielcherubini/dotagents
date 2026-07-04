@@ -16,7 +16,7 @@ Complete the plan lifecycle: mark it done, merge the PR, sync local main.
 **Don't use when:**
 - PR has failing CI — fix issues first
 - Plan doesn't have a PR yet — use `execute-plan` to create one
-- Design isn't approved yet — use `brainstorming`
+- Design isn't approved yet — use `discuss`
 
 ## Process
 

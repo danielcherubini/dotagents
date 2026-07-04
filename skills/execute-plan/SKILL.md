@@ -99,70 +99,69 @@ Then follow the user's choice immediately — do NOT ask for additional confirma
 
 ### Code review then PR
 
-1. Dispatch the **reviewer subagent**:
+**Run a review, fix issues, then open the PR.**
+
+1. Dispatch a **reviewer subagent** with the plan as context to check spec compliance and code quality:
 
    ```
    subagent({
      agent: "reviewer",
-     task: "Review type: implementation. Review the implementation against the plan at `docs/plans/YYYY-MM-DD-<feature>.md`. Check that all acceptance criteria are met and no planned work was missed."
-   })
-   ```
-2. Fix any critical/major issues from reviewer verdict
-3. Load the `review` skill to conduct a thorough code review
-4. **Clear the todo list** — remove all old task entries
-5. **Create new todos** for each finding from the review:
-   - One todo per issue found (blocking, important, nit, suggestion)
-   - Title: `[severity] <brief description>`
-   - Description: full details of the issue + suggested fix
-6. Fix issues ONE AT A TIME using general subagents:
-
-   **FOR EACH TODO ITEM, YOU MUST DISPATCH A SUBAGENT:**
-
-   ```
-   subagent({
-     agent: "general",
-     task: "Fix the following issue:\n\n[FULL TEXT from the todo item]\n\nLoad the `review` skill for guidance on best practices. Update the corresponding todo in the todo list to \"completed\" using manage_todo_list.",
-     description: "Fix: [severity] <brief description>"
+     task: "Review type: implementation. Review the implementation against the plan at `docs/plans/YYYY-MM-DD-<feature>.md`. Check that all acceptance criteria are met, no planned work was missed, and code follows standards. Consult the review skill's checklists for correctness, security, performance, and maintainability. Return a report categorized by severity. Do NOT call ask() — just return the report."
    })
    ```
 
-   **CRITICAL:** Do NOT fix the issue yourself. You MUST dispatch a `general` subagent for each todo item. Wait for the subagent to complete, then mark that todo as completed.
-7. Re-run the review once after all fixes
-8. If issues persist, escalate to user
-9. Then proceed to **Open PR** below
+2. Present the reviewer's findings to the user, then call `ask()` to let them choose what to fix:
+
+   ```
+   ask({
+     questions: [{
+       id: "fix-priority",
+       question: "Review complete. What would you like to fix before opening the PR?",
+       options: [
+         { label: "Fix blocking only" },
+         { label: "Fix blocking + important" },
+         { label: "Fix all" },
+         { label: "Skip fixes, open PR as-is" }
+       ]
+     }]
+   })
+   ```
+
+3. Fix selected issues (ONE AT A TIME via `general` subagents). Re-run the reviewer once after all fixes.
+4. Proceed to **Open PR** below
 
 ### Code review only
 
-1. Dispatch the **reviewer subagent**:
+**Run a review and fix issues — do NOT open a PR.**
+
+1. Dispatch a **reviewer subagent** with the plan as context to check spec compliance and code quality:
 
    ```
    subagent({
      agent: "reviewer",
-     task: "Review type: implementation. Review the implementation against the plan at `docs/plans/YYYY-MM-DD-<feature>.md`. Check that all acceptance criteria are met and no planned work was missed."
-   })
-   ```
-2. Fix any critical/major issues from reviewer verdict
-3. Load the `review` skill to conduct a thorough code review
-4. **Clear the todo list** — remove all old task entries
-5. **Create new todos** for each finding from the review:
-   - One todo per issue found (blocking, important, nit, suggestion)
-   - Title: `[severity] <brief description>`
-   - Description: full details of the issue + suggested fix
-6. Fix issues ONE AT A TIME using general subagents:
-
-   **FOR EACH TODO ITEM, YOU MUST DISPATCH A SUBAGENT:**
-
-   ```
-   subagent({
-     agent: "general",
-     task: "Fix the following issue:\n\n[FULL TEXT from the todo item]\n\nLoad the `review` skill for guidance on best practices. Update the corresponding todo in the todo list to \"completed\" using manage_todo_list.",
-     description: "Fix: [severity] <brief description>"
+     task: "Review type: implementation. Review the implementation against the plan at `docs/plans/YYYY-MM-DD-<feature>.md`. Check that all acceptance criteria are met, no planned work was missed, and code follows standards. Consult the review skill's checklists for correctness, security, performance, and maintainability. Return a report categorized by severity. Do NOT call ask() — just return the report."
    })
    ```
 
-   **CRITICAL:** Do NOT fix the issue yourself. You MUST dispatch a `general` subagent for each todo item.
-7. Re-run the review once after all fixes
-8. If issues persist, escalate to user
+2. Present the reviewer's findings to the user, then call `ask()` to let them choose what to fix:
+
+   ```
+   ask({
+     questions: [{
+       id: "fix-priority",
+       question: "Review complete. What would you like to fix?",
+       options: [
+         { label: "Fix blocking only" },
+         { label: "Fix blocking + important" },
+         { label: "Fix all" },
+         { label: "No fixes needed" }
+       ]
+     }]
+   })
+   ```
+
+3. Fix selected issues (ONE AT A TIME via `general` subagents). Re-run the reviewer once after all fixes.
+4. Return to the user — do NOT open a PR
 
 ### Open PR only
 
