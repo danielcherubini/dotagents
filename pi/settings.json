@@ -1,7 +1,7 @@
 {
   "lastChangelogVersion": "0.80.3",
-  "defaultProvider": "tama",
-  "defaultModel": "whatevers-hot-n-fresh",
+  "defaultProvider": "openrouter",
+  "defaultModel": "z-ai/glm-5.2",
   "packages": [
     "npm:pi-web-access",
     "npm:pi-updater",

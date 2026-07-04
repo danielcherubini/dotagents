@@ -99,69 +99,27 @@ Then follow the user's choice immediately — do NOT ask for additional confirma
 
 ### Code review then PR
 
-**Run a review, fix issues, then open the PR.**
+**Run a full code review, then open the PR.**
 
-1. Dispatch a **reviewer subagent** with the plan as context to check spec compliance and code quality:
+1. Load the `review` skill and run its full pipeline yourself (you are the main agent). Pass the implementation plan as context so the review checks **both** code quality (standards, smells) **and** spec compliance (implementation vs plan):
 
-   ```
-   subagent({
-     agent: "reviewer",
-     task: "Review type: implementation. Review the implementation against the plan at `docs/plans/YYYY-MM-DD-<feature>.md`. Check that all acceptance criteria are met, no planned work was missed, and code follows standards. Consult the review skill's checklists for correctness, security, performance, and maintainability. Return a report categorized by severity. Do NOT call ask() — just return the report."
-   })
-   ```
+   - The review skill handles: explore → classify → reviewer → present → ask → fix → re-review
+   - When dispatching its reviewer subagent, include this in the task: "Also review against the plan at `docs/plans/YYYY-MM-DD-<feature>.md` — check that all acceptance criteria are met and no planned work was missed."
+   - Let the review skill run to completion — do not short-circuit its ask() or skip its fix phase
 
-2. Present the reviewer's findings to the user, then call `ask()` to let them choose what to fix:
-
-   ```
-   ask({
-     questions: [{
-       id: "fix-priority",
-       question: "Review complete. What would you like to fix before opening the PR?",
-       options: [
-         { label: "Fix blocking only" },
-         { label: "Fix blocking + important" },
-         { label: "Fix all" },
-         { label: "Skip fixes, open PR as-is" }
-       ]
-     }]
-   })
-   ```
-
-3. Fix selected issues (ONE AT A TIME via `general` subagents). Re-run the reviewer once after all fixes.
-4. Proceed to **Open PR** below
+2. After the review skill completes, proceed to **Open PR** below
 
 ### Code review only
 
-**Run a review and fix issues — do NOT open a PR.**
+**Run a full code review — do NOT open a PR.**
 
-1. Dispatch a **reviewer subagent** with the plan as context to check spec compliance and code quality:
+1. Load the `review` skill and run its full pipeline yourself (you are the main agent). Pass the implementation plan as context so the review checks **both** code quality (standards, smells) **and** spec compliance (implementation vs plan):
 
-   ```
-   subagent({
-     agent: "reviewer",
-     task: "Review type: implementation. Review the implementation against the plan at `docs/plans/YYYY-MM-DD-<feature>.md`. Check that all acceptance criteria are met, no planned work was missed, and code follows standards. Consult the review skill's checklists for correctness, security, performance, and maintainability. Return a report categorized by severity. Do NOT call ask() — just return the report."
-   })
-   ```
+   - The review skill handles: explore → classify → reviewer → present → ask → fix → re-review
+   - When dispatching its reviewer subagent, include this in the task: "Also review against the plan at `docs/plans/YYYY-MM-DD-<feature>.md` — check that all acceptance criteria are met and no planned work was missed."
+   - Let the review skill run to completion — do not short-circuit its ask() or skip its fix phase
 
-2. Present the reviewer's findings to the user, then call `ask()` to let them choose what to fix:
-
-   ```
-   ask({
-     questions: [{
-       id: "fix-priority",
-       question: "Review complete. What would you like to fix?",
-       options: [
-         { label: "Fix blocking only" },
-         { label: "Fix blocking + important" },
-         { label: "Fix all" },
-         { label: "No fixes needed" }
-       ]
-     }]
-   })
-   ```
-
-3. Fix selected issues (ONE AT A TIME via `general` subagents). Re-run the reviewer once after all fixes.
-4. Return to the user — do NOT open a PR
+2. Return to the user — do NOT open a PR
 
 ### Open PR only
 
