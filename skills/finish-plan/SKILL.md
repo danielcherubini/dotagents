@@ -64,11 +64,11 @@ gh pr view [PR-NUMBER] --json state,statusCheckRollup,reviewDecision,mergeable
 
 Verify all of:
 - **State**: `OPEN`
-- **CI checks**: All passing (green) or no checks yet
+- **CI checks**: Every entry in `statusCheckRollup` has `conclusion: "SUCCESS"` (or `SKIPPED`). **Any entry with `status: "IN_PROGRESS"` or no `conclusion` means a check is still running — WAIT and re-check.** A bot review comment saying "safe to merge" does NOT mean the check is done. Do not proceed until every `statusCheckRollup` entry is `COMPLETED` with a non-empty `conclusion`.
 - **Reviews**: `APPROVED` (or no review required)
 - **Mergeable**: `MERGEABLE`
 
-If CI is still running, wait and re-check. If CI is failing, go to Step 1a.
+If any check is still running, wait (~30s) and re-check with the same command. Loop until all are `COMPLETED`. If CI is failing, go to Step 1a.
 
 ### 1a. Fix PR Issues (loop)
 
