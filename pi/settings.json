@@ -1,7 +1,7 @@
 {
   "lastChangelogVersion": "0.80.3",
   "defaultProvider": "tama",
-  "defaultModel": "whatevers-hot-n-fresh",
+  "defaultModel": "gotta-go-fast",
   "packages": [
     "npm:pi-web-access",
     "npm:pi-updater",

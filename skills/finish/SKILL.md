@@ -1,9 +1,9 @@
 ---
-name: wrapup
+name: finish
 description: Use when a plan's PR is ready to merge — marks the plan completed, checks PR status, merges to main, and syncs local main
 ---
 
-# Wrapup
+# Finish
 
 Complete the plan lifecycle: mark it done, merge the PR, sync local main.
 
@@ -64,7 +64,9 @@ gh pr view [PR-NUMBER] --json state,statusCheckRollup,reviewDecision,mergeable
 
 Verify all of:
 - **State**: `OPEN`
-- **CI checks**: Every entry in `statusCheckRollup` has `conclusion: "SUCCESS"` (or `SKIPPED`). **Any entry with `status: "IN_PROGRESS"` or no `conclusion` means a check is still running — WAIT and re-check.** A bot review comment saying "safe to merge" does NOT mean the check is done. Do not proceed until every `statusCheckRollup` entry is `COMPLETED` with a non-empty `conclusion`.
+- **CI checks**: Every entry in `statusCheckRollup` must reach a terminal state (`COMPLETED`) with a non-empty `conclusion`. **If any entry has `status: "IN_PROGRESS"`, `status: "QUEUED"`, or no `status`/`conclusion` at all, it means a check is still running — WAIT and re-check.** Poll every ~30 seconds until all checks reach `COMPLETED` state, regardless of whether they are currently passing or failing. A bot review comment saying "safe to merge" does NOT mean the check is done. Do not proceed until every `statusCheckRollup` entry is `COMPLETED` with a non-empty `conclusion`. Once all checks are `COMPLETED`:
+  - If all conclusions are `"SUCCESS"` or `"SKIPPED"` → proceed to merge
+  - If any conclusion is `"FAILURE"`, `"TIMED_OUT"`, or `"ACTION_REQUIRED"` → go to Step 1a
 - **Reviews**: `APPROVED` (or no review required)
 - **Mergeable**: `MERGEABLE`
 
@@ -149,7 +151,7 @@ Tell the user:
 | Issue | Action |
 |-------|--------|
 | Pending human reviewers | Ask user: wait or merge anyway? |
-| CI still running | Wait and re-check, or ask user if they want to proceed |
+| CI still running | Wait and re-check until all checks reach COMPLETED state, then evaluate results |
 | CI failing | Fix on feature branch, push, re-check (loop until green) |
 | Review comments unresolved | Fix each issue, push, reply to comment, re-check (loop until resolved) |
 | `CHANGES_REQUESTED` review | Fix the requested changes, push, re-check |
@@ -167,3 +169,4 @@ Tell the user:
 - **Always sync main after merge** — prevents stale branch issues
 - **Always update the plan index** — this is the single source of truth for plan status
 - **Use squash merge by default** — keeps main history clean
+- **Wait for all active checks to complete** — poll until every `statusCheckRollup` entry reaches `COMPLETED` state before evaluating results

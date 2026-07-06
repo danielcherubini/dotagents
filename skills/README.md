@@ -11,13 +11,13 @@ This pipeline was built around one belief: **you should be able to run small, op
 The trick is structure. If you break work into the right stages, each one produces artifacts precise enough that any capable model — even a small one — can execute its part without guessing. No chain-of-thought fluff, no vague prompts, no context bleed between tasks.
 
 ```
-discuss → specify → implement → wrapup
+discuss → specify → implement → finish
 ```
 
 - **discuss** — collaborative design dialogue. Produces an approved spec with clear terminology, trade-offs, and acceptance criteria.
 - **specify** — turns the spec into independent, commitable tasks. Each task is self-contained: exact file paths, function names, test commands. Written for a context-free agent.
 - **implement** — executes the plan task by task. Subagents get one task each, run TDD, commit, report done.
-- **wrapup** — checks reviews and CI, fixes issues, merges, syncs main.
+- **finish** — checks reviews and CI, fixes issues, merges, syncs main.
 
 The result: you can one-shot any task no matter how complex, just by running it through the pipeline. Small models handle the execution. You handle the design.
 
@@ -34,7 +34,7 @@ The [research](research/) and [review](review/) skills are pluggable gates you c
 | [discuss](discuss/) | "let's discuss", "lets brainstorm" | Collaborative design dialogue before coding. Establishes shared terminology, proposes approaches with trade-offs, captures ADRs and glossary terms. Hard gate — no code until design is approved. |
 | [specify](specify/) | After design approval | Turns an approved design into a structured implementation plan with independent, commitable tasks. Writes to `docs/plans/`. Includes reviewer pass against the actual codebase. |
 | [implement](implement/) | After plan is ready | Executes the plan: creates feature branch, runs baseline checks, dispatches subagents per task, handles reviews, opens PRs. |
-| [wrapup](wrapup/) | "merge this", "ship it", "finish up" | Completes the plan lifecycle: checks reviews and CI, fixes issues, merges the PR, syncs local main, updates the plan index. |
+| [finish](finish/) | "merge this", "ship it", "finish up" | Completes the plan lifecycle: checks reviews and CI, fixes issues, merges the PR, syncs local main, updates the plan index. |
 
 ## Quality and Debugging
 
@@ -81,7 +81,7 @@ The [research](research/) and [review](review/) skills are pluggable gates you c
 
 1. **Auto-detection** — The agent reads the `description` field in each skill's frontmatter to decide when to load it
 2. **Manual reference** — You can explicitly ask the agent to use a skill by name
-3. **Chaining** — Skills naturally flow into each other (e.g., `discuss` → `specify` → `implement` → `wrapup`)
+3. **Chaining** — Skills naturally flow into each other (e.g., `discuss` → `specify` → `implement` → `finish`)
 
 ## Adding New Skills
 
