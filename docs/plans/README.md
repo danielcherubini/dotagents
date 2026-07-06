@@ -11,4 +11,4 @@
 
 | Plan | Status | Date |
 |------|--------|------|
-| [Codebase Improvement Skill](plans/2025-07-06-codebase-improvement-skill.md) | ✅ COMPLETED | 2025-07-06 |
+| [Codebase Improvement Skill](2025-07-06-codebase-improvement-skill.md) | ✅ COMPLETED | 2025-07-06 |
