@@ -1,9 +1,9 @@
 ---
-name: execute-plan
+name: implement
 description: Use when you have a written implementation plan to execute
 ---
 
-# Execute Plan
+# Implement
 
 Read the plan, create a feature branch, dispatch subagents per task, review the branch, open a PR.
 
@@ -142,7 +142,7 @@ Report the PR URL to the user.
 ### Finish Plan
 
 1. **Clear the todo list** — remove all remaining entries
-2. Load the `finish-plan` skill to check PR status, merge to main, and update the plan index
+2. Load the `wrapup` skill to check PR status, merge to main, and update the plan index
 
 ## Update Plan Index
 

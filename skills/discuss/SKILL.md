@@ -118,7 +118,7 @@ If the user chooses "Run a reviewer", THEN:
 
 If the user chooses "Create implementation plan":
 1. **Clear the todo list** — use `manage_todo_list` to remove all entries now that discussion is complete.
-2. Immediately load the `create-plan` skill and invoke it. The `create-plan` skill handles the entire planning process.
+2. Immediately load the `specify` skill and invoke it. The `specify` skill handles the entire planning process.
 
 If the user chooses "Save spec for later", THEN:
 1. Write it to `docs/plans/YYYY-MM-DD-<topic>-spec.md`
