@@ -1,14 +1,33 @@
 # Skills
 
-Specialized instruction sets that extend the agent's capabilities for specific workflows. Each skill is a self-contained directory with a `SKILL.md` file containing step-by-step guidance, checklists, and best practices.
+Specialized instruction sets that extend the agent's capabilities for structured workflows.
 
-Skills are loaded automatically when the agent detects matching triggers in your messages, or you can reference them explicitly.
+---
+
+## The Idea
+
+This pipeline was built around one belief: **you should be able to run small, open models locally and still ship complex work reliably.**
+
+The trick is structure. If you break work into the right stages, each one produces artifacts precise enough that any capable model — even a small one — can execute its part without guessing. No chain-of-thought fluff, no vague prompts, no context bleed between tasks.
+
+```
+discuss → specify → implement → wrapup
+```
+
+- **discuss** — collaborative design dialogue. Produces an approved spec with clear terminology, trade-offs, and acceptance criteria.
+- **specify** — turns the spec into independent, commitable tasks. Each task is self-contained: exact file paths, function names, test commands. Written for a context-free agent.
+- **implement** — executes the plan task by task. Subagents get one task each, run TDD, commit, report done.
+- **wrapup** — checks reviews and CI, fixes issues, merges, syncs main.
+
+The result: you can one-shot any task no matter how complex, just by running it through the pipeline. Small models handle the execution. You handle the design.
+
+### Where larger models fit
+
+The [research](research/) and [review](review/) skills are pluggable gates you can run with either small or large models. Need a second opinion on architecture? Run research through a bigger model. Want a thorough code review before merge? Offload it. Like getting a second opinion from a specialist — you pay for the heavy reasoning only when you need it, and the rest of the pipeline stays cheap.
 
 ---
 
 ## Development Workflow
-
-Skills that cover the full feature lifecycle — from idea to merge:
 
 | Skill | Trigger | What it does |
 |-------|---------|--------------|
@@ -32,7 +51,7 @@ Skills that cover the full feature lifecycle — from idea to merge:
 |-------|---------|--------------|
 | [gitflow-branching](gitflow-branching/) | Starting new work requiring a branch | Trunk-based branching conventions: `main → feature/* or bugfix/* → main`. Always branch from main, keep branches short-lived. |
 | [release](release/) | "release", "bump version", "publish vX.Y.Z" | Multi-language semver bumping with GitHub Actions verification. Detects all ecosystem files, checks CI status, applies custom `AGENTS.md` steps, tags and pushes. |
-| [daily-summary](daily-summary/) | "daily summary", "standup", "what did I do today" | Scans git history across `~/Coding/AI` and `~/Coding/Ops`, synthesizes a Slack-ready bulleted summary to `/tmp/daily-summary-<date>.txt`. |
+| [daily-summary](daily-summary/) | "daily summary", "standup", "what did I do today" | Scans git history across configured repo roots, synthesizes a Slack-ready bulleted summary to a tmp file for copy-paste. |
 
 ## Research and Discovery
 
@@ -65,4 +84,4 @@ Skills that cover the full feature lifecycle — from idea to merge:
 
 ## Adding New Skills
 
-Place a new directory under `~/.agents/skills/` with a `SKILL.md` file containing YAML frontmatter (`name` + `description`). See the [writing-skills](writing-skills/) skill for the full TDD-driven creation process.
+Place a new directory in the skills folder with a `SKILL.md` file containing YAML frontmatter (`name` + `description`). See the [writing-skills](writing-skills/) skill for the full TDD-driven creation process.
