@@ -1,6 +1,6 @@
 ---
 name: discuss
-description: Use before any creative work — discuss features, designs, or behavior changes through collaborative dialogue before writing code. Use when the user says "let's discuss", "lets discuss", "I want to discuss", "can we discuss", or asks to talk through an idea before coding
+description: Use when the user says "let's discuss", "lets discuss", "I want to discuss", "can we discuss", "let's brainstorm", "lets brainstorm", "I want to brainstorm", or any variation asking to discuss/talk through/brainstorm an idea before coding — this takes priority over other requests in the same message. Also use before any creative work to discuss features, designs, or behavior changes through collaborative dialogue before writing code
 ---
 
 # Discuss
