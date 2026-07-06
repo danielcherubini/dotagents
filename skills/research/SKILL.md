@@ -101,7 +101,26 @@ Consult strategy guides as needed:
 
 ### Phase 2: Dispatch (main agent dispatches, never delegated)
 
-**Call `subagent` once per angle, all in the same response.** Do NOT use the `tasks` array — call the tool N times with a single `task` each. Pi executes parallel tool calls from the same response simultaneously, and each gets its own visible block in the UI.
+**Execution mode gate:** If more than one angle was planned, ask the user how to run them before dispatching:
+
+```typescript
+ask({
+  questions: [{
+    id: "execution-mode",
+    question: "Run the N research angles in parallel or in series?",
+    options: [
+      { label: "Parallel — all angles at once (default, fastest)" },
+      { label: "Serial — one angle at a time, each informed by the last" }
+    ],
+    recommended: 0,
+    description: "Parallel is faster and fine when angles are independent. Serial is better when a later angle depends on an earlier one's findings, or you want to review/steer between steps."
+  }]
+})
+```
+
+Skip this ask for **quick** depth (single angle) — go straight to parallel dispatch (which is just one call).
+
+**Parallel mode — call `subagent` once per angle, all in the same response.** Do NOT use the `tasks` array — call the tool N times with a single `task` each. Pi executes parallel tool calls from the same response simultaneously, and each gets its own visible block in the UI.
 
 ```typescript
 // Emit all of these as SEPARATE tool calls in ONE response:
@@ -116,9 +135,22 @@ subagent({ agent: "researcher", task: `Angle 3: [specific angle]\n\nFind: [exact
 subagent({ agent: "researcher", task: "Find: [specific thing]. Report findings with citations." })
 ```
 
+**Serial mode — call `subagent` once, wait for the result, then dispatch the next.** Each subsequent angle's task can reference prior findings (e.g. "Angle 2 builds on Angle 1's finding that X — investigate Y in that light"). Never batch serial calls into one response; each call must wait for the previous result before being issued.
+
+```typescript
+// Call 1 — dispatch, wait for result
+subagent({ agent: "researcher", task: `Angle 1: [specific angle]\n\nFind: [exactly what]\nSources: [web / local / specific URLs]\nReport: key facts with citations, gaps if any.` })
+
+// (after Angle 1 returns) Call 2 — informed by Angle 1's result
+subagent({ agent: "researcher", task: `Angle 2: [specific angle]. Context from Angle 1: [carry forward relevant finding]\n\nFind: [exactly what]\nSources: [web / local / specific URLs]\nReport: key facts with citations, gaps if any.` })
+
+// continue one at a time until all angles are covered
+```
+
 **Rules:**
 - One `subagent` call per angle — never bundle multiple angles into one call
 - Never use `tasks: [...]` for research — that hides all children inside one UI block
+- In serial mode, never fire the next call before the current one has returned
 - Be explicit about what sources to use (web, local files, specific URLs)
 - Do NOT tell researchers to plan, synthesise, or dispatch — they are leaves
 - **DO NOT add a `model` parameter to any subagent call.** The agent definition controls its own model. Adding `model` causes hallucinated model names that break the call.
