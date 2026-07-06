@@ -1,6 +1,6 @@
 ---
 name: discuss
-description: Use before any creative work — discuss features, designs, or behavior changes through collaborative dialogue before writing code
+description: Use before any creative work — discuss features, designs, or behavior changes through collaborative dialogue before writing code. Use when the user says "let's discuss", "lets discuss", "I want to discuss", "can we discuss", or asks to talk through an idea before coding
 ---
 
 # Discuss
@@ -17,12 +17,35 @@ Do NOT write code or invoke implementation skills until design is approved.
 
 ## Process
 
-1. Explore context — check files, docs, recent commits
-2. Research if needed — if the question requires comparing approaches, evaluating libraries, or understanding how something works, read the `research` skill and run Phases 1–3 (classify, dispatch, synthesise) yourself. Present a concise summary of findings — not the full report. Use the evidence to inform the approaches in step 3.
-3. Ask clarifying questions — one at a time, use the `ask` tool with multiple-choice options
-4. Propose 2-3 approaches with trade-offs and your recommendation, use the `ask` tool
-5. Present design section by section, use the `ask` tool to get approval after each section
-6. Once all sections are approved, present the final spec in full
+### 0. Understand the domain first
+
+Before discussing design, establish shared language. This prevents the whole conversation from drifting on fuzzy terms.
+
+**A. Read the glossary** — Check for `CONTEXT.md` at the project root (or per-context if `CONTEXT-MAP.md` exists). If it exists, read it and use the established terms from the very first question. If no glossary exists yet, you'll build one.
+
+**B. Challenge fuzzy language** — When the user uses vague or overloaded terms, call it out immediately. "You're saying 'account' — do you mean the Customer or the User? Those are different things." Propose a precise canonical term.
+
+**C. Cross-reference with code** — When the user states how something works, check whether the code agrees. If you find a contradiction, surface it: "Your code cancels entire Orders, but you just said partial cancellation is possible — which is right?"
+
+**D. Challenge against the glossary** — If the user uses a term that conflicts with `CONTEXT.md`, call it out: "Your glossary defines 'cancellation' as X, but you seem to mean Y — which is it?"
+
+**E. Stress-test with scenarios** — When domain relationships are being discussed, invent edge-case scenarios that force precision about the boundaries between concepts.
+
+**F. Capture terms inline** — When a term is resolved, offer to add it to `CONTEXT.md` right then (see Terminology Check below). Don't wait until the end.
+
+> Only proceed to step 1 once terminology is settled. If the discussion itself reveals new terms or ambiguities, loop back.
+
+### 1. Explore context — check files, docs, recent commits
+
+### 2. Research if needed — if the question requires comparing approaches, evaluating libraries, or understanding how something works, read the `research` skill and run Phases 1–3 (classify, dispatch, synthesise) yourself. Present a concise summary of findings — not the full report. Use the evidence to inform the approaches in step 3.
+
+### 3. Ask clarifying questions — one at a time, use the `ask` tool with multiple-choice options
+
+### 4. Propose 2-3 approaches with trade-offs and your recommendation, use the `ask` tool
+
+### 5. Present design section by section, use the `ask` tool to get approval after each section
+
+### 6. Once all sections are approved, present the final spec in full
 
 > **Always use the `ask` tool** for steps 3–5. Do not present a section and then continue to the next — wait for the user's explicit approval via `ask` before moving forward.
 
