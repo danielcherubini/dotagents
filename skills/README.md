@@ -32,7 +32,6 @@ Skills that cover the full feature lifecycle — from idea to merge:
 |-------|---------|--------------|
 | [gitflow-branching](gitflow-branching/) | Starting new work requiring a branch | Trunk-based branching conventions: `main → feature/* or bugfix/* → main`. Always branch from main, keep branches short-lived. |
 | [release](release/) | "release", "bump version", "publish vX.Y.Z" | Multi-language semver bumping with GitHub Actions verification. Detects all ecosystem files, checks CI status, applies custom `AGENTS.md` steps, tags and pushes. |
-| [create-jira-ticket](create-jira-ticket/) | "open a ticket", "create a ticket" | Creates well-formed Jira tickets via MCP with project routing, business unit/label selection, financial result estimation, and structured descriptions. |
 | [daily-summary](daily-summary/) | "daily summary", "standup", "what did I do today" | Scans git history across `~/Coding/AI` and `~/Coding/Ops`, synthesizes a Slack-ready bulleted summary to `/tmp/daily-summary-<date>.txt`. |
 
 ## Research and Discovery
