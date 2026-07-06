@@ -1,7 +1,7 @@
 ---
 name: general
 description: General-purpose subagent for implementing a single task from an approved plan
-model: tama/whatevers-hot-n-fresh
+model: tama/gotta-go-fast
 mode: subagent
 subtask: "true"
 ---

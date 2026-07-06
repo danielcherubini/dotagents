@@ -1,9 +1,9 @@
 ---
-name: create-plan
+name: specify
 description: Use when a feature or change needs an implementation plan with concrete tasks, file paths, and test steps before coding begins
 ---
 
-# Create Plan
+# Specify
 
 Turn an approved design into a structured implementation plan with independent, commitable tasks.
 
@@ -90,9 +90,9 @@ Then update `docs/plans/README.md`:
 2. Increment the Total Plans count in Quick Stats
 3. If this plan supersedes an older one, move the old entry to the Superseded Plans section
 
-**CRITICAL: Do NOT begin implementing any tasks in the plan. The `create-plan` skill ends once the plan is vetted and presented to the user. You must wait for explicit user approval before transitioning to implementation/execution.**
+**CRITICAL: Do NOT begin implementing any tasks in the plan. The `specify` skill ends once the plan is vetted and presented to the user. You must wait for explicit user approval before transitioning to implementation/execution.**
 
-Then tell the user the plan is ready, and immediately load the `execute-plan` skill to begin implementation.
+Then tell the user the plan is ready, and immediately load the `implement` skill to begin implementation.
 
 **Clear the todo list** — use `manage_todo_list` to remove all entries now that planning is complete.
 

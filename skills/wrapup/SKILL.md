@@ -1,9 +1,9 @@
 ---
-name: finish-plan
+name: wrapup
 description: Use when a plan's PR is ready to merge — marks the plan completed, checks PR status, merges to main, and syncs local main
 ---
 
-# Finish Plan
+# Wrapup
 
 Complete the plan lifecycle: mark it done, merge the PR, sync local main.
 
@@ -11,11 +11,11 @@ Complete the plan lifecycle: mark it done, merge the PR, sync local main.
 
 - After a plan's PR is open and all reviews/CI have passed
 - When the user says "merge this", "ship it", "finish up", or "land this"
-- After `execute-plan` has opened the PR
+- After `implement` has opened the PR
 
 **Don't use when:**
 - PR has failing CI — fix issues first
-- Plan doesn't have a PR yet — use `execute-plan` to create one
+- Plan doesn't have a PR yet — use `implement` to create one
 - Design isn't approved yet — use `discuss`
 
 ## Process
