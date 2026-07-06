@@ -15,7 +15,8 @@ Main agent (YOU — running this skill)
   ├── Phase 2: Dispatch explore subagents for scanning  ← pure leaves, no user interaction
   ├── Phase 3: Dispatch explore + reviewer subagents    ← pure leaves, no user interaction
   ├── Phase 4: Synthesize findings → write report       ← YOU do this
-  └── Phase 5: Walk through findings with ask()         ← YOU interact with the user
+  ├── Phase 5: Walk through findings with ask()         ← YOU interact with the user
+  └── Phase 6: Pipeline handoff (specify / save / revise) ← YOU decide next step
 ```
 
 **You (the main agent) own all orchestration AND all user interaction.** Subagents dispatched in Phases 2–3 are pure data-gathering leaves:
