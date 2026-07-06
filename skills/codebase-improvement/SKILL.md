@@ -7,6 +7,24 @@ description: Use when asking to improve a codebase, refactor for quality, find a
 
 Systematic codebase audit that surfaces improvement opportunities through 8 engineering lenses, produces a dated markdown report in `docs/reviews/`, then walks through each finding conversationally. Flows into the standard dev pipeline (discuss → specify → implement) after approval.
 
+## Architecture — Read This First
+
+```
+Main agent (YOU — running this skill)
+  ├── Phase 1: Load context (CONTEXT.md, ADRs, plans)
+  ├── Phase 2: Dispatch explore subagents for scanning  ← pure leaves, no user interaction
+  ├── Phase 3: Dispatch explore + reviewer subagents    ← pure leaves, no user interaction
+  ├── Phase 4: Synthesize findings → write report       ← YOU do this
+  └── Phase 5: Walk through findings with ask()         ← YOU interact with the user
+```
+
+**You (the main agent) own all orchestration AND all user interaction.** Subagents dispatched in Phases 2–3 are pure data-gathering leaves:
+
+- **Subagents scan and report findings** — they return structured data (file paths, descriptions, evidence). They do NOT call `ask()`, do NOT present findings to the user, do NOT suggest what to do.
+- **The main agent synthesizes, writes the report, and discusses** — after collecting all subagent results, the main agent classifies findings, writes the markdown report, then walks through each finding with the user via `ask()`.
+
+**Subagents never interact with the user.** If a subagent is about to call `ask()` or present findings conversationally, it has violated this rule.
+
 ## When to Use
 
 - "Improve this codebase", "Audit the code quality", "Find architectural issues"
@@ -34,7 +52,7 @@ Load the **research skill** and follow its dispatch pattern for code research:
 3. **Dispatch** parallel explore subagents — one per angle. Each subagent scans the codebase through its lens and returns findings with file paths and evidence.
 4. **Synthesize** all findings — merge duplicates across lenses (each finding assigned to its primary lens), classify by severity and confidence.
 
-**Ownership boundary:** This skill follows the research skill's dispatch pattern (classify → angles → dispatch → synthesize). It does NOT execute the research skill's Phase 4.5 `ask()` hard-stop — this skill handles all user interaction in Phase 5.
+**Ownership boundary:** This skill follows the research skill's dispatch pattern (classify → angles → dispatch → synthesize). It does NOT execute the research skill's Phase 4.5 `ask()` hard-stop — the main agent handles all user interaction in Phase 5. Subagents return findings only; they never call `ask()` or present to the user.
 
 ### Phase 3: Deep-dive (follow the review skill's dispatch pattern)
 
@@ -47,7 +65,7 @@ For each triggered finding:
 2. Dispatch a reviewer subagent for detailed analysis
 3. Collect the categorized report and enrich the finding
 
-**Ownership boundary:** This skill follows the review skill's dispatch pattern (explore → reviewer → collect). It does NOT execute the review skill's `ask()` hard-stop — this skill handles all user interaction in Phase 5.
+**Ownership boundary:** This skill follows the review skill's dispatch pattern (explore → reviewer → collect). It does NOT execute the review skill's `ask()` hard-stop — the main agent handles all user interaction in Phase 5. Subagents return reports only; they never call `ask()` or present to the user.
 
 ### Phase 4: Report
 
@@ -89,6 +107,8 @@ N findings across M categories. X high, Y medium, Z low.
 Present the summary to the user.
 
 ### Phase 5: Discuss (one by one)
+
+**The main agent** walks through each finding from the report and calls `ask()` for the user to decide. Do NOT delegate this to a subagent — the main agent owns the conversation.
 
 For each finding, call `ask()`:
 

@@ -7,6 +7,19 @@ description: Use when asking to improve a codebase, refactor for quality, find a
 
 Systematic codebase audit that surfaces improvement opportunities through 8 engineering lenses, produces a dated markdown report in `docs/reviews/`, then walks through each finding conversationally. Flows into the standard dev pipeline (discuss → specify → implement) after approval.
 
+## Architecture — Read This First
+
+```
+Main agent (YOU — running this skill)
+  ├── Phase 1: Load context (CONTEXT.md, ADRs, plans)
+  ├── Phase 2: Dispatch explore subagents for scanning  ← pure leaves, no user interaction
+  ├── Phase 3: Dispatch explore + reviewer subagents    ← pure leaves, no user interaction
+  ├── Phase 4: Synthesize findings → write report       ← YOU do this
+  └── Phase 5: Walk through findings with ask()         ← YOU interact with the user
+```
+
+**You (the main agent) own all orchestration AND all user interaction.** Subagents dispatched in Phases 2–3 are pure data-gathering leaves — they return findings only, never call `ask()` or present to the user.
+
 ## When to Use
 
 - "Improve this codebase", "Audit the code quality", "Find architectural issues"
