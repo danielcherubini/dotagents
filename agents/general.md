@@ -1,7 +1,7 @@
 ---
 name: general
 description: General-purpose subagent for implementing a single task from an approved plan
-model: tama/gotta-go-fast
+model: tama/unsloth/qwen3.6-35b-a3b-mtp-gguf
 mode: subagent
 subtask: "true"
 ---

@@ -104,7 +104,7 @@ Then follow the user's choice immediately — do NOT ask for additional confirma
 1. Load the `review` skill and run its full pipeline yourself (you are the main agent). Pass the implementation plan as context so the review checks **both** code quality (standards, smells) **and** spec compliance (implementation vs plan):
 
    - The review skill handles: explore → classify → reviewer → present → ask → fix → re-review
-   - When dispatching its reviewer subagent, include this in the task: "Also review against the plan at `docs/plans/YYYY-MM-DD-<feature>.md` — check that all acceptance criteria are met and no planned work was missed."
+   - When dispatching its reviewer subagent, include this in the task: "Also review against the plan at `docs/plans/plan-NNN-<feature>.md` — check that all acceptance criteria are met and no planned work was missed."
    - Let the review skill run to completion — do not short-circuit its ask() or skip its fix phase
 
 2. After the review skill completes, proceed to **Open PR** below
@@ -116,7 +116,7 @@ Then follow the user's choice immediately — do NOT ask for additional confirma
 1. Load the `review` skill and run its full pipeline yourself (you are the main agent). Pass the implementation plan as context so the review checks **both** code quality (standards, smells) **and** spec compliance (implementation vs plan):
 
    - The review skill handles: explore → classify → reviewer → present → ask → fix → re-review
-   - When dispatching its reviewer subagent, include this in the task: "Also review against the plan at `docs/plans/YYYY-MM-DD-<feature>.md` — check that all acceptance criteria are met and no planned work was missed."
+   - When dispatching its reviewer subagent, include this in the task: "Also review against the plan at `docs/plans/plan-NNN-<feature>.md` — check that all acceptance criteria are met and no planned work was missed."
    - Let the review skill run to completion — do not short-circuit its ask() or skip its fix phase
 
 2. Return to the user — do NOT open a PR

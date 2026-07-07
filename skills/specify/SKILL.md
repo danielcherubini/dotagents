@@ -24,7 +24,7 @@ This skill expects an approved design spec. The spec comes from the conversation
 
 ## Plan Format
 
-Write to `docs/plans/YYYY-MM-DD-<feature>.md`:
+Write to `docs/plans/plan-NNN-<feature>.md` (NNN is the next sequential number, zero-padded to 3 digits, e.g. `plan-001-<feature>.md`, `plan-002-<feature>.md`):
 
 ```markdown
 # [Feature] Plan
@@ -79,14 +79,14 @@ Dispatch the **reviewer subagent** to review the plan:
 ```
 subagent({
   agent: "reviewer",
-  task: "Review type: plan execution review. Review the implementation plan at `docs/plans/YYYY-MM-DD-<feature>.md`. This is NOT a review of the plan file as a document — it is a review of the plan against the actual codebase that will be modified. Read every file the plan references (creates, modifies, tests). Read any additional files needed to verify the plan is correct: existing interfaces, types, imports, dependencies, build configs, and related modules. Report anything the plan should do differently: missing files, wrong paths, incorrect signatures, overlooked edge cases, integration gaps, or anything the executing agent would get wrong. If you need to read the whole codebase to be sure, do it. The plan will be executed verbatim by an agent with no context — leave no stone unturned."
+  task: "Review type: plan execution review. Review the implementation plan at `docs/plans/plan-NNN-<feature>.md`. This is NOT a review of the plan file as a document — it is a review of the plan against the actual codebase that will be modified. Read every file the plan references (creates, modifies, tests). Read any additional files needed to verify the plan is correct: existing interfaces, types, imports, dependencies, build configs, and related modules. Report anything the plan should do differently: missing files, wrong paths, incorrect signatures, overlooked edge cases, integration gaps, or anything the executing agent would get wrong. If you need to read the whole codebase to be sure, do it. The plan will be executed verbatim by an agent with no context — leave no stone unturned."
 })
 ```
 
 Fix issues (max 3 rounds).
 
 Then update `docs/plans/README.md`:
-1. Add the new plan to the appropriate category table with status 🚧 IN PROGRESS
+1. Add the new plan to the appropriate category table with status 🚧 IN PROGRESS (use the sequential number, e.g. `plan-001`)
 2. Increment the Total Plans count in Quick Stats
 3. If this plan supersedes an older one, move the old entry to the Superseded Plans section
 

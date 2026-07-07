@@ -4,11 +4,21 @@
 - Total Plans: 1
 - In Progress: 0
 - Completed: 1
+- Total Specs: 0
+- Draft: 0
 
 ## Active Plans
 
 ### Quality and Debugging
 
-| Plan | Status | Date |
-|------|--------|------|
-| [Codebase Improvement Skill](2025-07-06-codebase-improvement-skill.md) | ✅ COMPLETED | 2025-07-06 |
+| Plan | Status |
+|------|--------|
+| [Codebase Improvement Skill](plan-001-codebase-improvement-skill.md) | ✅ COMPLETED |
+
+## Specs
+
+### Draft
+
+| Spec | Topic |
+|------|-------|
+| *(none)* | |
