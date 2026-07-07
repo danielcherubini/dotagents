@@ -86,7 +86,7 @@ subagent({
 Fix issues (max 3 rounds).
 
 Then update `docs/plans/README.md`:
-1. Add the new plan to the appropriate category table with status 🚧 IN PROGRESS (use the sequential number, e.g. `plan-001`)
+1. Add the new plan to the Backlog table (use the sequential number, e.g. `plan-001`)
 2. Increment the Total Plans count in Quick Stats
 3. If this plan supersedes an older one, move the old entry to the Superseded Plans section
 

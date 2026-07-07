@@ -1,7 +1,7 @@
 ---
 name: reviewer
 description: Reviews specs, plans, and code for quality, correctness, and completeness. Returns structured verdicts. Review only — never makes changes.
-model: openrouter/z-ai/glm-5.2
+model: openrouter/minimax/minimax-m3
 thinking: high
 inheritProjectContext: "false"
 inheritSkills: "false"

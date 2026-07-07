@@ -12,7 +12,7 @@ Read the plan, create a feature branch, dispatch subagents per task, review the 
 If no plan file path is provided by the user:
 
 1. **Read the plans index** — Load `docs/plans/README.md` (or the project's equivalent plan index) to find available plans.
-2. **Identify candidates** — Collect all plans marked as 🚧 IN PROGRESS or 📋 DRAFT / ❌ NOT STARTED (exclude ✅ COMPLETED, 🔁 SUPERSEDED, and any "remaining work" / roadmap items that lack a plan file).
+2. **Identify candidates** — Collect all plans in the Backlog section (exclude ✅ COMPLETED, 🔁 SUPERSEDED, and any "remaining work" / roadmap items that lack a plan file).
 3. **Ask the user** which plan to execute:
 
 ```
@@ -147,8 +147,8 @@ Report the PR URL to the user.
 ## Update Plan Index
 
 After a PR is opened, update `docs/plans/README.md`:
-1. Change the plan's status from 🚧 IN PROGRESS to ✅ COMPLETED
+1. Move the plan from the Backlog table to the appropriate Completed Plans category
 2. Add the PR number and key git commit refs to the entry
-3. Decrement remaining count, increment completed count in Quick Stats
+3. Increment completed count in Quick Stats
 4. Commit this update with message: `docs: mark [plan-name] as completed`
 5. **Clear the todo list** — remove all remaining entries

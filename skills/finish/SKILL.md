@@ -127,12 +127,19 @@ git pull origin main
 
 ### 5. Update Plan Index
 
+Move the plan file to the done/ archive:
+
+```bash
+mv docs/plans/plan-NNN-<feature>.md docs/plans/done/
+```
+
 Edit `docs/plans/README.md`:
 
-1. Change the plan's status emoji from 🚧 to ✅
-2. Add the PR number and key git refs to the entry (if not already present)
-3. Update Quick Stats: decrement remaining count, increment completed count
-4. If the plan was in the "Remaining Work" table, move it to the appropriate "Completed Plans" category
+1. Remove the plan from the Backlog table
+2. Add the plan to the appropriate "Completed Plans" category (update link to `done/plan-NNN-<feature>.md`)
+3. Add the PR number and key git refs to the entry (if not already present)
+4. Update Quick Stats: increment completed count, decrement backlog count
+5. If the Backlog table is now empty, remove the section
 
 Commit the update:
 
@@ -162,7 +169,7 @@ Tell the user:
 | Bot review clean ("no new issues") | Continue to next step |
 | Merge conflicts on PR | Do NOT merge locally. Ask user to resolve on the branch. |
 | PR already merged | Skip merge step, sync main, update index |
-| Plan not in README.md | Add it as ✅ COMPLETED with the PR number |
+| Plan not in README.md | Add it to the Completed Plans section with the PR number |
 
 ## Rules
 

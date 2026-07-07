@@ -145,8 +145,8 @@ If the user chooses "Create implementation plan":
 
 If the user chooses "Save spec for later", THEN:
 1. Write it to `docs/plans/spec-NNN-<topic>.md` (NNN is the next sequential number, zero-padded to 3 digits)
-2. Add the new spec to `docs/plans/README.md` in the appropriate category with status 📋 DRAFT
-3. Update the Quick Stats (increment Total Specs and Draft count)
+2. Add the new spec to `docs/plans/README.md` in the Backlog section
+3. Update the Quick Stats (increment Total Specs and Backlog count)
 
 ## Principles
 

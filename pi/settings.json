@@ -1,7 +1,7 @@
 {
   "lastChangelogVersion": "0.80.3",
   "defaultProvider": "tama",
-  "defaultModel": "unsloth/qwen3.6-35b-a3b-mtp-gguf",
+  "defaultModel": "unsloth/qwen3.6-27b-mtp-gguf",
   "packages": [
     "npm:pi-web-access",
     "npm:pi-updater",
