@@ -80,7 +80,7 @@ Up to 6 repos (including contributed-to repos):
 
 - All 6 slots used? Descriptions filled in? Variety across technologies?
 - Prioritize repos with stars (social proof) that align with career/business goals.
-- Each pinned repo should have a polished README (github-repo skill applies here).
+- Each pinned repo should have a polished README (run the `write-readme` skill if needed).
 
 ### Contribution Activity (x/10)
 
@@ -102,8 +102,10 @@ The profile README should be scannable, personal, and purposeful — every secti
 
 ## Phase 2.5: Metadata and readability pass
 
-1. **`metadata-check` skill** — run on the GitHub bio (160 chars) and any pinned repo descriptions you rewrote. Front-loading, concreteness, active voice, truncation fit (GitHub shows ~100 chars in profile cards).
-2. **`readability-check` skill** — run on the profile README body. Profile READMEs are skimmed; one passive or long sentence stands out.
+Run an inline quality pass on the bio and README body:
+
+1. **Bio & pinned repo descriptions** — check for front-loading (key info in first ~100 chars), concreteness, active voice, truncation fit (GitHub shows ~100 chars in profile cards).
+2. **README body** — check for passive voice, long sentences, and clarity. Profile READMEs are skimmed; one passive or long sentence stands out.
 
 Apply fixes directly. Focus on: (1) bio / opening README line (disproportionate weight); (2) first sentence of each section (skimming entry point); (3) passive voice (flat in first-person content).
 
@@ -117,7 +119,7 @@ Be specific: "Set your bio to: [text, under 160 chars]", "Add these topics to yo
 
 ### Pinned repository strategy
 
-Recommend which 6 repos to pin and why — variety across technologies, star count (social proof), README quality, alignment with goals. If pinned repos have weak READMEs, suggest improving those first (github-repo skill).
+Recommend which 6 repos to pin and why — variety across technologies, star count (social proof), README quality, alignment with goals. If pinned repos have weak READMEs, suggest improving those first (run the `write-readme` skill).
 
 ---
 

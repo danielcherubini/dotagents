@@ -1,8 +1,6 @@
 ---
 name: daily-summary
-description: Generate a daily standup-style summary from today's git activity across all repos under ~/Coding/AI and ~/Coding/Ops, then write it to a tmp file for copy-pasting into Slack. Use when the user says "daily summary", "standup", "what did I do today", "summary for slack", "daily update", or "/daily-summary".
-user-invocable: true
-argument-hint: [optional date, e.g. "today", "yesterday", "2026-07-01"]
+description: 'Use when the user asks for a daily summary, standup, or wants to know what they did today — e.g. "daily summary", "standup", "what did I do today", "summary for slack", "daily update".'
 ---
 
 # Daily Summary Skill

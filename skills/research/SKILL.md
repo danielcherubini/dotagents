@@ -1,15 +1,12 @@
 ---
 name: research
 description: |
-  Comprehensive research skill with phased workflow for web, code, academic,
-  and video research. The main agent orchestrates everything — classifying,
-  planning angles, dispatching parallel researcher subagents, synthesising.
-  Researcher subagents are pure data-gathering leaves (no nesting).
-  Use when: comparing libraries or frameworks, evaluating approaches or
+  Use when comparing libraries or frameworks, evaluating approaches or
   architectures, investigating a technology or topic, finding best practices,
   deep-diving into a subject, doing competitive analysis, or researching
-  academic papers. Not for: simple file lookups (use explore directly),
-  quick fact checks, or tasks requiring code changes.
+  academic papers. Triggers on: "research", "compare", "evaluate",
+  "deep-dive", "investigate", "best practices for". Not for: simple file
+  lookups (use explore directly), quick fact checks, or tasks requiring code changes.
 ---
 
 # Research

@@ -1,21 +1,13 @@
 ---
 name: review
 description: |
-  Provides comprehensive code review guidance for React 19, Vue 3, Rust, TypeScript, Java, Python, C/C++, Go, and WASM.
-  Helps catch bugs, improve code quality, and give constructive feedback through systematic analysis.
-  Features detailed language-specific guides, severity classification, review techniques, and hard-stop protocol.
-  Use when: reviewing pull requests, conducting PR reviews, code review, reviewing code changes,
-  establishing review standards, mentoring developers, architecture reviews, security audits,
-  checking code quality, finding bugs, giving feedback on code.
-allowed-tools:
-  - Read
-  - Grep
-  - Glob
-  - Bash      # Run lint/test/build commands to verify code quality
-  - WebFetch  # Look up latest docs and best practices
+  Use when reviewing pull requests, PRs, code changes, or code quality.
+  Covers architecture reviews, security audits, mentoring through review feedback,
+  and establishing review standards. Triggers on: "review", "code review", "PR review",
+  "check this code", "audit", "security review".
 ---
 
-# Koji Review
+# Review
 
 Transform code reviews from gatekeeping to knowledge sharing through constructive feedback, systematic analysis, and collaborative improvement.
 

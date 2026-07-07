@@ -1,6 +1,6 @@
 ---
-name: create-readme
-description: 'Create a README.md file for the project'
+name: write-readme
+description: 'Use when asked to create, write, or generate a README.md for a project. Triggers on: "create a README", "write a README", "add README", "project README".'
 ---
 
 ## Role

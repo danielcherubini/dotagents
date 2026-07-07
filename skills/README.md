@@ -59,21 +59,21 @@ The [research](research/) and [review](review/) skills are pluggable gates you c
 | Skill | Trigger | What it does |
 |-------|---------|--------------|
 | [research](research/) | Comparing libraries, evaluating approaches, deep-dives | Phased research: classify → dispatch parallel researcher subagents → synthesize → hard-stop ask → deliver. Evidence-backed with citations. |
-| [librarian](librarian/) | Library internals, "how does X implement Y", source references | Clones repos, searches code with grep, builds GitHub permalinks with commit SHAs. Every claim backed by actual code. |
+| [find-skills](find-skills/) | "find a skill for X", "how do I do X" | Searches the open agent skills ecosystem (skills.sh) and helps discover, evaluate, and install new skills. |
 | [find-skills](find-skills/) | "find a skill for X", "how do I do X" | Searches the open agent skills ecosystem (skills.sh) and helps discover, evaluate, and install new skills. |
 
 ## Profile and Documentation
 
 | Skill | Trigger | What it does |
 |-------|---------|--------------|
-| [create-readme](create-readme/) | "create a README", "write a README" | Surveys the project and writes a comprehensive, well-structured README.md inspired by top open-source projects. |
+| [write-readme](write-readme/) | "create a README", "write a README" | Surveys the project and writes a comprehensive, well-structured README.md inspired by top open-source projects. |
 | [github-profile](github-profile/) | "improve my GitHub profile", "profile README" | Audits and optimizes GitHub profile pages — README, metadata, pinned repos, stats widgets. Scores four categories (x/40 total). |
 
 ## Meta
 
 | Skill | Trigger | What it does |
 |-------|---------|--------------|
-| [writing-skills](writing-skills/) | Creating new skills, editing existing skills | TDD for process documentation. RED-GREEN-REFACTOR cycle applied to skill creation: write failing test (baseline), write skill, verify compliance, close loopholes. |
+| [write-skills](write-skills/) | Creating new skills, editing existing skills | TDD for process documentation. RED-GREEN-REFACTOR cycle applied to skill creation: write failing test (baseline), write skill, verify compliance, close loopholes. |
 
 ---
 
@@ -85,4 +85,4 @@ The [research](research/) and [review](review/) skills are pluggable gates you c
 
 ## Adding New Skills
 
-Place a new directory in the skills folder with a `SKILL.md` file containing YAML frontmatter (`name` + `description`). See the [writing-skills](writing-skills/) skill for the full TDD-driven creation process.
+Place a new directory in the skills folder with a `SKILL.md` file containing YAML frontmatter (`name` + `description`). See the [write-skills](write-skills/) skill for the full TDD-driven creation process.
