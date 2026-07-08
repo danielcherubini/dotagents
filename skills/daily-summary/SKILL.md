@@ -131,9 +131,10 @@ Today:
 ...
 ```
 
-Then print the path and echo the contents to the chat so the user can review inline:
+Then copy to clipboard, print the path, and echo the contents to the chat so the user can review inline:
 ```bash
-echo "Written to $OUT"
+wl-copy < "$OUT"
+echo "Written to $OUT (copied to clipboard)"
 cat "$OUT"
 ```
 
