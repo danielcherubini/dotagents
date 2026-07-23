@@ -28,7 +28,7 @@ ask({
 })
 ```
 
-4. If only one candidate exists, you may skip asking and proceed directly.
+4. Always ask the user which plan to execute, even if only one candidate exists — do NOT skip the approval gate.
 5. Once selected, read the full plan file and continue to Branch Setup.
 
 ## Branch Setup
@@ -89,6 +89,7 @@ ask({
       { label: "Code review then PR" },
       { label: "Open PR only" },
       { label: "Code review only" },
+      { label: "Greptile review loop" },
       { label: "Finish plan" }
     ]
   }]
@@ -121,6 +122,17 @@ Then follow the user's choice immediately — do NOT ask for additional confirma
 
 2. Return to the user — do NOT open a PR
 
+### Greptile Review Loop
+
+**Run Greptile review iteratively on the local branch until clean — do NOT open a PR during the loop.**
+
+1. Load the `greptile` skill and run it to completion (setup → review → parse → fix → re-run → loop until clean or max iterations)
+2. The greptile skill handles the review loop itself — let it run to completion
+3. The greptile skill's Phase 7 will ask **Open a PR** or **Merge to main** and execute the chosen action:
+   - **Open a PR** → The greptile skill opens the PR and reports the URL
+   - **Merge to main** → The greptile skill opens the PR, then loads the `finish` skill (see **Finish Plan** below)
+4. After the greptile skill completes, proceed to **Update Plan Index** below
+
 ### Open PR only
 
 ```bash
@@ -139,10 +151,24 @@ Report the PR URL to the user.
 
 **Clear the todo list** — remove all remaining entries now that execution is complete.
 
+Proceed to **Update Plan Index** below.
+
 ### Finish Plan
 
 1. **Clear the todo list** — remove all remaining entries
-2. Load the `finish` skill to check PR status, merge to main, and update the plan index
+2. Open a PR (the `finish` skill requires an existing PR):
+   ```bash
+   git push -u origin [branch-name]
+   gh pr create --title "[title]" --body "$(cat <<'EOF'
+   ## Summary
+   - [bullets]
+
+   ## Test plan
+   - [ ] [verification steps]
+   EOF
+   )"
+   ```
+3. Load the `finish` skill to check PR status, merge to main, and update the plan index
 
 ## Update Plan Index
 
