@@ -160,12 +160,16 @@ ask({
   ```
   Report the PR URL to the user. Clear the todo list.
 
-- **Merge to main** → Load the `finish` skill and run its full pipeline:
-  - Check reviews and comments FIRST
-  - Check CI and mergeability
-  - Merge the PR (squash by default)
-  - Sync local main
-  - Update plan index
+- **Merge to main** → First open a PR (the `finish` skill requires an existing PR), then load the `finish` skill:
+  1. Push the branch and open a PR using the **Open a PR** procedure above
+  2. Load the `finish` skill and run its full pipeline:
+     - Check reviews and comments FIRST
+     - Check CI and mergeability
+     - Merge the PR (squash by default)
+     - Sync local main
+     - Update plan index
+
+  > **Why:** The `finish` skill is PR-centric — its first step calls `gh pr view [PR-NUMBER]`, and its "Don't use when" section says "Plan doesn't have a PR yet — use implement to create one." So a PR must exist before `finish` can run. Opening the PR first (without announcing it to the user) ensures `finish` has a PR to check and merge.
 
 ## Integration with Implement Skill
 
