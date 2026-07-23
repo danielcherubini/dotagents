@@ -153,7 +153,19 @@ Report the PR URL to the user.
 ### Finish Plan
 
 1. **Clear the todo list** — remove all remaining entries
-2. Load the `finish` skill to check PR status, merge to main, and update the plan index
+2. Open a PR (the `finish` skill requires an existing PR — its first step calls `gh pr view` and its docs say "Don't use when: Plan doesn't have a PR yet"):
+   ```bash
+   git push -u origin [branch-name]
+   gh pr create --title "[title]" --body "$(cat <<'EOF'
+   ## Summary
+   - [bullets]
+
+   ## Test plan
+   - [ ] [verification steps]
+   EOF
+   )"
+   ```
+3. Load the `finish` skill to check PR status, merge to main, and update the plan index
 
 ## Update Plan Index
 
