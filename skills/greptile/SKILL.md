@@ -146,7 +146,7 @@ ask({
 })
 ```
 
-- **Open a PR** → Follow the implement skill's "Open PR only" procedure:
+- **Open a PR** → Push the branch and open a PR:
   ```bash
   git push -u origin [branch-name]
   gh pr create --title "[title]" --body "$(cat <<'EOF'
@@ -158,7 +158,7 @@ ask({
   EOF
   )"
   ```
-  Report the PR URL to the user. Clear the todo list.
+  Report the PR URL to the user. Return to the implement skill, which will handle updating the plan index.
 
 - **Merge to main** → First open a PR (the `finish` skill requires an existing PR), then load the `finish` skill:
   1. Push the branch and open a PR using the **Open a PR** procedure above

@@ -128,9 +128,10 @@ Then follow the user's choice immediately — do NOT ask for additional confirma
 
 1. Load the `greptile` skill and run it to completion (setup → review → parse → fix → re-run → loop until clean or max iterations)
 2. The greptile skill handles the review loop itself — let it run to completion
-3. After the greptile skill's loop exits, it will ask: **Open a PR** or **Merge to main**:
-   - **Open a PR** → Follow the **Open PR only** procedure below
-   - **Merge to main** → Load the `finish` skill (see **Finish Plan** below)
+3. The greptile skill's Phase 7 will ask **Open a PR** or **Merge to main** and execute the chosen action:
+   - **Open a PR** → The greptile skill opens the PR and reports the URL
+   - **Merge to main** → The greptile skill opens the PR, then loads the `finish` skill (see **Finish Plan** below)
+4. After the greptile skill completes, proceed to **Update Plan Index** below
 
 ### Open PR only
 
@@ -150,7 +151,24 @@ Report the PR URL to the user.
 
 **Clear the todo list** — remove all remaining entries now that execution is complete.
 
+Proceed to **Update Plan Index** below.
+
 ### Finish Plan
+
+1. **Clear the todo list** — remove all remaining entries
+2. Open a PR (the `finish` skill requires an existing PR):
+   ```bash
+   git push -u origin [branch-name]
+   gh pr create --title "[title]" --body "$(cat <<'EOF'
+   ## Summary
+   - [bullets]
+
+   ## Test plan
+   - [ ] [verification steps]
+   EOF
+   )"
+   ```
+3. Load the `finish` skill to check PR status, merge to main, and update the plan index
 
 1. **Clear the todo list** — remove all remaining entries
 2. Open a PR (the `finish` skill requires an existing PR — its first step calls `gh pr view` and its docs say "Don't use when: Plan doesn't have a PR yet"):
