@@ -26,13 +26,13 @@ Main agent (YOU — running this skill)
   ├── Phase 1: Setup (repo context, greptile CLI, authentication)
   ├── Phase 2: Run greptile review — capture JSON output
   ├── Phase 3: Parse findings — classify actionable vs informational
-  ├── Phase 4: Fix findings — dispatch reviewer subagent to fix each actionable item
+  ├── Phase 4: Fix findings — dispatch general subagent to fix each actionable item
   ├── Phase 5: Re-run review — loop back to Phase 2 if findings remain
   ├── Phase 6: Exit conditions met — present summary
   └── Phase 7: Final ask() — Open a PR or Merge to main
 ```
 
-**You (the main agent) own all orchestration AND all user interaction.** Subagents dispatched in Phase 4 are pure fixing leaves — they return fixes only, never call `ask()` or present to the user.
+**You (the main agent) own all orchestration AND all user interaction.** Subagents dispatched in Phase 4 are pure fixing leaves — they apply fixes and return summaries, never call `ask()` or present to the user.
 
 ## Workflow
 
@@ -92,16 +92,20 @@ If there are **zero findings**, skip to Phase 6 (exit condition met).
 
 ### Phase 4: Fix Findings
 
-For each actionable finding, dispatch a `reviewer` subagent with the context:
+For each actionable finding, dispatch a `general` subagent with the context:
 
 ```
+// Dispatch one general subagent per actionable finding (or batch related findings):
 subagent({
-  agent: "reviewer",
-  task: "Fix the following Greptile findings on the local branch. For each finding: read the file, understand the issue, make the fix, and stage the change with git add. Findings: [list with file paths and descriptions]. Return a summary of what was changed."
+  agent: "general",
+  task: "Fix the following Greptile findings on the local branch. For each finding: read the file, understand the issue, make the fix, and stage the change with git add. Findings: [list with file paths and descriptions]. Return a summary of what was changed.",
+  description: "Fix Greptile finding: [short summary]"
 })
 ```
 
-The reviewer subagent returns a summary of changes. The main agent does NOT fix code directly — it delegates to the subagent.
+The `general` subagent (not `reviewer`) is the correct dispatch target for applying code fixes — it is the same agent the `implement` skill uses for task execution. The `reviewer` subagent is prohibited from making changes and only returns reports.
+
+> **Ownership boundary:** The main agent owns the loop orchestration (run review → parse → fix → re-run). The `general` subagent owns the fix application. The main agent does NOT fix code directly — it delegates to the subagent and then re-runs the review.
 
 ### Phase 5: Re-run Review (Loop)
 

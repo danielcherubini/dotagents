@@ -90,7 +90,7 @@ Then update `docs/plans/README.md`:
 2. Increment the Total Plans count in Quick Stats
 3. If this plan supersedes an older one, move the old entry to the Superseded Plans section
 
-**CRITICAL: Do NOT begin implementing any tasks in the plan. The `specify` skill ends once the plan is vetted and presented to the user. You must wait for explicit user approval before transitioning to implementation/execution.**
+**CRITICAL: Do NOT begin implementing any tasks in the plan. The `specify` skill ends once the plan is vetted and presented to the user. The plan is handed off to the `implement` skill, which will ask the user to confirm plan selection before executing.**
 
 Then tell the user the plan is ready, and immediately load the `implement` skill to begin implementation.
 
