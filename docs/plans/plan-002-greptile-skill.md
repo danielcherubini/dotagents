@@ -3,7 +3,7 @@
 **Goal:** Create a skill that runs `greptile review` iteratively on the local branch until clean (no actionable findings), then asks whether to open a PR or merge to main — without opening a PR during the review loop.
 **Architecture:** Single SKILL.md file as an orchestration skill. Main agent runs greptile CLI review, parses JSON findings, fixes issues via subagent dispatch, re-runs until clean (max iterations), then hands off to `implement` (open PR) or `finish` (merge to main).
 **Tech Stack:** Markdown skill file, tested via subagent pressure scenarios. Greptile CLI already installed globally (`greptile@3.2.3`).
-**Spec:** Full approved spec at `docs/specs/2025-07-23-greptile-skill-spec.md`.
+**Spec:** Full approved spec at `docs/specs/spec-001-greptile-skill-spec.md`.
 
 ---
 
@@ -37,7 +37,7 @@ Per gitflow-branching, all work on a feature branch. The `docs/plans/README.md` 
 Per writing-skills TDD, write the spec first. The spec defines the greptile skill's behavior: iterative local-branch review loop, fix-and-rerun cycle, exit conditions, and the final ask() for Open PR vs Merge to main.
 
 **Files:**
-- Create: `docs/specs/2025-07-23-greptile-skill-spec.md`
+- Create: `docs/specs/spec-001-greptile-skill-spec.md`
 
 **What to implement:**
 Write a spec covering:
@@ -50,11 +50,11 @@ Write a spec covering:
 - **Handoff:** Open PR (implement) or Merge to main (finish)
 
 **Steps:**
-- [ ] Write `docs/specs/2025-07-23-greptile-skill-spec.md`
+- [ ] Write `docs/specs/spec-001-greptile-skill-spec.md`
 - [ ] Verify spec covers all workflow phases and exit conditions
 
 **Acceptance criteria:**
-- [ ] Spec file created at `docs/specs/2025-07-23-greptile-skill-spec.md`
+- [ ] Spec file created at `docs/specs/spec-001-greptile-skill-spec.md`
 - [ ] Spec covers: setup, review loop, fix mechanism, exit conditions, final ask(), implement integration
 - [ ] Spec defines handoff to implement (open PR) and finish (merge to main)
 
@@ -63,10 +63,10 @@ Write a spec covering:
 ### Task 2: Write the SKILL.md file
 
 **Context:**
-The spec is saved at `docs/specs/2025-07-23-greptile-skill-spec.md`. This task creates the actual skill file from that spec.
+The spec is saved at `docs/specs/spec-001-greptile-skill-spec.md`. This task creates the actual skill file from that spec.
 
 **Files:**
-- Read: `docs/specs/2025-07-23-greptile-skill-spec.md`
+- Read: `docs/specs/spec-001-greptile-skill-spec.md`
 - Create: `skills/greptile/SKILL.md`
 
 **What to implement:**
@@ -80,7 +80,7 @@ Write `skills/greptile/SKILL.md` following the writing-skills SKILL.md structure
 - Integration note with implement skill
 
 **Steps:**
-- [ ] Read `docs/specs/2025-07-23-greptile-skill-spec.md`
+- [ ] Read `docs/specs/spec-001-greptile-skill-spec.md`
 - [ ] Write `skills/greptile/SKILL.md`
 - [ ] Verify frontmatter < 1024 chars
 - [ ] Verify description starts with "Use when..." and contains triggers only
