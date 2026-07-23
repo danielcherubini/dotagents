@@ -28,7 +28,7 @@ ask({
 })
 ```
 
-4. If only one candidate exists, you may skip asking and proceed directly.
+4. Always ask the user which plan to execute, even if only one candidate exists — do NOT skip the approval gate.
 5. Once selected, read the full plan file and continue to Branch Setup.
 
 ## Branch Setup
