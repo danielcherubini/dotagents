@@ -18,7 +18,7 @@
 | Plan | PR | Status |
 |------|----|--------|
 | [Codebase Improvement Skill](plan-001-codebase-improvement-skill.md) | ✅ COMPLETED |
-| [Greptile Skill](plan-002-greptile-skill.md) | ✅ COMPLETED |
+| [Greptile Skill](plan-002-greptile-skill.md) | PR #3 | ✅ COMPLETED |
 
 ## Specs
 
