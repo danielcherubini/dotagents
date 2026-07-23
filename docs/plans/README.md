@@ -1,9 +1,9 @@
 # Plans
 
 ## Quick Stats
-- Total Plans: 1
+- Total Plans: 2
 - In Progress: 0
-- Completed: 1
+- Completed: 2
 - Total Specs: 0
 - Draft: 0
 
@@ -14,6 +14,7 @@
 | Plan | Status |
 |------|--------|
 | [Codebase Improvement Skill](plan-001-codebase-improvement-skill.md) | ✅ COMPLETED |
+| [Greptile Skill](plan-002-greptile-skill.md) | ✅ COMPLETED |
 
 ## Specs
 

@@ -89,6 +89,7 @@ ask({
       { label: "Code review then PR" },
       { label: "Open PR only" },
       { label: "Code review only" },
+      { label: "Greptile review loop" },
       { label: "Finish plan" }
     ]
   }]
@@ -120,6 +121,16 @@ Then follow the user's choice immediately — do NOT ask for additional confirma
    - Let the review skill run to completion — do not short-circuit its ask() or skip its fix phase
 
 2. Return to the user — do NOT open a PR
+
+### Greptile Review Loop
+
+**Run Greptile review iteratively on the local branch until clean — do NOT open a PR during the loop.**
+
+1. Load the `greptile` skill and run it to completion (setup → review → parse → fix → re-run → loop until clean or max iterations)
+2. The greptile skill handles the review loop itself — let it run to completion
+3. After the greptile skill's loop exits, it will ask: **Open a PR** or **Merge to main**:
+   - **Open a PR** → Follow the **Open PR only** procedure below
+   - **Merge to main** → Load the `finish` skill (see **Finish Plan** below)
 
 ### Open PR only
 
