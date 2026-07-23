@@ -5,7 +5,12 @@ description: Use when you have a written implementation plan to execute
 
 # Implement
 
+> 🚨 **CORE RULE: This skill dispatches `general` subagents to do the work. The main agent orchestrates — it does NOT write code, edit files, or run builds directly.**
+
 Read the plan, create a feature branch, dispatch subagents per task, review the branch, open a PR.
+
+> ⚠️ **Before each task: STOP → Dispatch a `general` subagent → Verify dispatch → Handle response.**
+> See the [Task Dispatch Protocol](#task-dispatch-protocol) for the mandatory per-task sequence.
 
 ## Plan Selection
 
@@ -35,6 +40,8 @@ ask({
 - Create feature branch using gitflow conventions (load `gitflow-branching` skill if needed)
 - Create a todo list with `manage_todo_list` with all tasks from the plan
 
+> 🔒 **Gate: Do not proceed to Task Dispatch until the branch exists AND the todo list is created.** These are prerequisites for proper subagent dispatch and tracking.
+
 ## Baseline Check (Mandatory Before Task 1)
 
 Before writing a single line of code, run the full test/lint/build suite and record the results:
@@ -51,11 +58,30 @@ Document the baseline results in your working notes so you know which failures w
 
 ## Task Dispatch Protocol
 
-For each task, dispatch the `general` agent (sequentially, not parallel).
+> ⚠️ **DISPATCH GUARD — READ BEFORE EVERY TASK**
+>
+> - **You MUST dispatch a `general` subagent for each task.**
+> - **DO NOT write code, edit files, or run builds directly in your own context.**
+> - If you skip dispatch, you forfeit TDD, per-task commits, and isolation — the entire point of this skill.
+> - The only exception is the Baseline Check (run before Task 1) and the final PR/code-review steps.
+
+### Per-Task Sequence (follow rigidly for every task)
+
+**Step 1 — STOP & Verify.**
+Before touching anything, confirm:
+- [ ] This is a task from the plan, not a tangent
+- [ ] No code has been written yet in this context
+- [ ] You are about to dispatch a `general` subagent (not do the work yourself)
+
+**Step 2 — Dispatch the subagent.**
 
 > **DO NOT add a `model` parameter to any subagent call.** The agent definition controls its own model. Adding `model` causes hallucinated model names that break the call.
 
 ```
+/// ───────────────────────────────────────────────────────────
+///  MANDATORY: dispatch a `general` subagent for this task.
+///  DO NOT write code directly in your own context.
+/// ───────────────────────────────────────────────────────────
 subagent({
   agent: "general",
   task: "[FULL TEXT of task from plan — paste it, don't make the agent read a file]\n\nContext: [where this fits, dependencies, what's already done]",
@@ -69,12 +95,20 @@ The `general` agent already knows to:
 - Commit with a descriptive message
 - Report DONE | BLOCKED | NEEDS_CONTEXT
 
-**Handle subagent responses:**
+**Step 3 — Verify dispatch happened.**
+After the `subagent()` call returns, confirm the subagent actually performed the work:
+- [ ] The response includes file edits, test runs, or commits from the subagent
+- [ ] You did NOT write any code, edit files, or run builds in your own context
+- [ ] If you find yourself having done work inline, stop and re-dispatch the subagent immediately
+
+**Step 4 — Handle the subagent response:**
 - **DONE:** Mark task complete in todo list, move to next task
 - **NEEDS_CONTEXT:** Provide missing info, re-dispatch
 - **BLOCKED:** Assess blocker, provide help or escalate to user
 
 **Important:** Dispatch tasks sequentially (not in parallel) to avoid file conflicts.
+
+> 🔁 **If you catch yourself doing work inline instead of dispatching — stop, reset, and dispatch the subagent.** This is the #1 failure mode of this skill; do not let it happen.
 
 ## After All Tasks Complete
 

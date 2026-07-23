@@ -92,10 +92,30 @@ If there are **zero findings**, skip to Phase 6 (exit condition met).
 
 ### Phase 4: Fix Findings
 
-For each actionable finding, dispatch a `general` subagent with the context:
+> ⚠️ **DISPATCH GUARD — READ BEFORE FIXING EACH FINDING**
+>
+> - **You MUST dispatch a `general` subagent for each actionable finding.**
+> - **DO NOT fix code, edit files, or stage changes directly in your own context.**
+> - If you skip dispatch, you forfeit the isolation and accountability that the subagent provides.
+> - The main agent owns orchestration only — fix application is delegated.
+
+#### Per-Finding Sequence (follow rigidly for every actionable finding)
+
+**Step 1 — STOP & Verify.**
+Before touching anything, confirm:
+- [ ] This is an actionable finding from the current review output
+- [ ] No fix has been applied yet in this context
+- [ ] You are about to dispatch a `general` subagent (not fix the code yourself)
+
+**Step 2 — Dispatch the subagent.**
+
+> **DO NOT add a `model` parameter to any subagent call.** The agent definition controls its own model. Adding `model` causes hallucinated model names that break the call.
 
 ```
-// Dispatch one general subagent per actionable finding (or batch related findings):
+/// ───────────────────────────────────────────────────────────
+///  MANDATORY: dispatch a `general` subagent to fix this finding.
+///  DO NOT edit files or stage changes in your own context.
+/// ───────────────────────────────────────────────────────────
 subagent({
   agent: "general",
   task: "Fix the following Greptile findings on the local branch. For each finding: read the file, understand the issue, make the fix, and stage the change with git add. Findings: [list with file paths and descriptions]. Return a summary of what was changed.",
@@ -105,7 +125,13 @@ subagent({
 
 The `general` subagent (not `reviewer`) is the correct dispatch target for applying code fixes — it is the same agent the `implement` skill uses for task execution. The `reviewer` subagent is prohibited from making changes and only returns reports.
 
-> **Ownership boundary:** The main agent owns the loop orchestration (run review → parse → fix → re-run). The `general` subagent owns the fix application. The main agent does NOT fix code directly — it delegates to the subagent and then re-runs the review.
+**Step 3 — Verify dispatch happened.**
+After the `subagent()` call returns, confirm the subagent actually performed the fix:
+- [ ] The response includes file edits or `git add` from the subagent
+- [ ] You did NOT edit files or stage changes in your own context
+- [ ] If you find yourself having fixed code inline, stop and re-dispatch the subagent immediately
+
+> 🔁 **If you catch yourself fixing code inline instead of dispatching — stop, reset, and dispatch the subagent.** This is the #1 failure mode of this skill; do not let it happen.
 
 ### Phase 5: Re-run Review (Loop)
 
@@ -207,3 +233,4 @@ When selected:
 | Hiding CLI failures | Report the failing command and next action |
 | Exceeding max iterations | Stop at 5 iterations and report remaining findings |
 | Opening a PR during the loop | The greptile skill does NOT open PRs — only Phase 7 does, per user choice |
+| Fixing findings directly instead of dispatching a subagent | The main agent must delegate ALL code fixes to `general` subagents — never edit files or stage changes in your own context |
