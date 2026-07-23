@@ -11,11 +11,12 @@ if [[ "$SCRIPT_DIR" != "$HOME/.agents" ]]; then
 fi
 
 # Each line: destination  source (relative to ~/.agents/)
+# NOTE: pi/, claude/, opencode/ configs now live in ~/dotfiles/ and are
+# managed by dotfiles/install.conf.yaml (dotbot). Only skills/ and agents/
+# remain here.
 declare -A LINKS=(
     ["~/.claude/skills"]="skills"
     ["~/.config/opencode/agents"]="agents"
-    ["~/.config/opencode/opencode.json"]="opencode/opencode.jsonc"
-    ["~/.pi/agent/settings.json"]="pi/settings.json"
 )
 
 link() {

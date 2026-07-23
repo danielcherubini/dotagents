@@ -131,9 +131,18 @@ Today:
 ...
 ```
 
-Then copy to clipboard, print the path, and echo the contents to the chat so the user can review inline:
+Then copy to clipboard (platform-aware), print the path, and echo the contents to the chat so the user can review inline:
 ```bash
-wl-copy < "$OUT"
+# Copy to clipboard (Wayland / X11 / macOS)
+if command -v wl-copy &>/dev/null; then
+  wl-copy < "$OUT"
+elif command -v xclip &>/dev/null; then
+  xclip -selection clipboard < "$OUT"
+elif command -v pbcopy &>/dev/null; then
+  pbcopy < "$OUT"
+else
+  echo "(clipboard copy not available — install wl-copy, xclip, or pbcopy)"
+fi
 echo "Written to $OUT (copied to clipboard)"
 cat "$OUT"
 ```

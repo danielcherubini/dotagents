@@ -1,19 +1,24 @@
 # Plans
 
 ## Quick Stats
-- Total Plans: 1
-- In Progress: 0
-- Completed: 1
-- Total Specs: 0
+- Total Plans: 2
+- Backlog: 0
+- Completed: 2
+- Total Specs: 1
 - Draft: 0
 
-## Active Plans
+## Backlog
+
+*(none — all plans completed)*
+
+## Completed Plans
 
 ### Quality and Debugging
 
-| Plan | Status |
-|------|--------|
+| Plan | PR | Status |
+|------|----|--------|
 | [Codebase Improvement Skill](plan-001-codebase-improvement-skill.md) | ✅ COMPLETED |
+| [Greptile Skill](plan-002-greptile-skill.md) | ✅ COMPLETED |
 
 ## Specs
 
@@ -21,4 +26,10 @@
 
 | Spec | Topic |
 |------|-------|
-| *(none)* | |
+| *(none)* |
+
+### Completed
+
+| Spec | Topic |
+|------|-------|
+| [spec-001-greptile-skill-spec](spec-001-greptile-skill-spec.md) | Greptile skill spec |

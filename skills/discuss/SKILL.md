@@ -144,9 +144,9 @@ If the user chooses "Create implementation plan":
 2. Immediately load the `specify` skill and invoke it. The `specify` skill handles the entire planning process.
 
 If the user chooses "Save spec for later", THEN:
-1. Write it to `docs/plans/spec-NNN-<topic>.md` (NNN is the next sequential number, zero-padded to 3 digits)
-2. Add the new spec to `docs/plans/README.md` in the Backlog section
-3. Update the Quick Stats (increment Total Specs and Backlog count)
+1. Write it to `docs/specs/spec-NNN-<topic>-spec.md` (NNN is the next sequential number, zero-padded to 3 digits, matching the plan numbering convention)
+2. Add the new spec to `docs/plans/README.md` in the Specs → Draft section
+3. Update the Quick Stats (increment Total Specs and Draft count)
 
 ## Principles
 

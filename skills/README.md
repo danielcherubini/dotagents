@@ -45,6 +45,7 @@ The [research](research/) and [review](review/) skills are pluggable gates you c
 | [systematic-debugging](systematic-debugging/) | Any bug, test failure, unexpected behavior | Root-cause-first debugging process. Investigate → analyze → hypothesize → fix. No guessing. Stops after 3+ failed fixes to question architecture. |
 | [test-driven-development](test-driven-development/) | Before writing implementation code | RED-GREEN-REFACTOR cycle. Write failing test first, verify it fails, write minimal code to pass, refactor. No production code without a failing test. |
 | [verification-before-completion](verification-before-completion/) | Before claiming work is done | Run the verification command. Read the output. Then claim the result. No "should work" or "looks correct" without evidence. |
+| [greptile](greptile/) | "greptile review", "greptile loop", "review with greptile" | Runs Greptile CLI review iteratively on the local branch until all findings are resolved, then offers to open a PR or merge to main. |
 
 ## Project Operations
 
@@ -59,7 +60,6 @@ The [research](research/) and [review](review/) skills are pluggable gates you c
 | Skill | Trigger | What it does |
 |-------|---------|--------------|
 | [research](research/) | Comparing libraries, evaluating approaches, deep-dives | Phased research: classify → dispatch parallel researcher subagents → synthesize → hard-stop ask → deliver. Evidence-backed with citations. |
-| [find-skills](find-skills/) | "find a skill for X", "how do I do X" | Searches the open agent skills ecosystem (skills.sh) and helps discover, evaluate, and install new skills. |
 | [find-skills](find-skills/) | "find a skill for X", "how do I do X" | Searches the open agent skills ecosystem (skills.sh) and helps discover, evaluate, and install new skills. |
 
 ## Profile and Documentation

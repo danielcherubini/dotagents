@@ -130,6 +130,7 @@ git pull origin main
 Move the plan file to the done/ archive:
 
 ```bash
+mkdir -p docs/plans/done/
 mv docs/plans/plan-NNN-<feature>.md docs/plans/done/
 ```
 
